@@ -65,6 +65,7 @@ class _StartingAnimationState extends State<StartingAnimation> {
                 left: 0,
                 top: 205,
                 child: Container(
+                  alignment: Alignment.center,
                   width: 360,
                   height: 360,
                   decoration: BoxDecoration(
