@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "830405842866",
+    "project_id": "eduscope-7f35b",
+    "storage_bucket": "eduscope-7f35b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830405842866:android:0d5548f13f25d787c976ab",
+        "android_client_info": {
+          "package_name": "com.example.eduscope"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "830405842866-3cjfnf9td2tadthvc3fl8mpnlsnjdt6i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQpfzN7mb5DJ2_hVYP-Ulv4ST2LeO08Q0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830405842866-3cjfnf9td2tadthvc3fl8mpnlsnjdt6i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
