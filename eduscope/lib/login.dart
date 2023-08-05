@@ -134,7 +134,7 @@ class LoginPage extends StatelessWidget {
                   width: 164,
                   height: 15,
                   child: Text(
-                    'don’t have an account?',
+                    "don't have an account?",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -145,7 +145,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               Positioned(
-                left: 235,
+                left: 236,
                 top: 565,
                 child: SizedBox(
                   width: 76,
