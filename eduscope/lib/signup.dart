@@ -1,38 +1,40 @@
 import 'package:eduscope_2023/home.dart';
+import 'package:eduscope_2023/login.dart';
 import 'package:eduscope_2023/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'auth.dart';
-import 'signup.dart';
 
-class LoginPage extends StatefulWidget {
+class SignupPage extends StatefulWidget {
   @override
-  LoginPage_state createState() => LoginPage_state();
+  SignupPage_state createState() => SignupPage_state();
 }
 
-class LoginPage_state extends State<LoginPage> {
+class SignupPage_state extends State<SignupPage> {
   final _formkey = GlobalKey<FormState>();
-  final email_controller = TextEditingController();
-  final password_controller = TextEditingController();
+  final reg_email_controller = TextEditingController();
+  final reg_password_controller = TextEditingController();
   bool isLogin = false;
   bool isLoading = false;
 
-  Future signInWithEmailAndPassword() async {
+  Future createUserWithEmailAndPassword() async {
     try {
       setState(() {
         isLoading = true;
       });
       print('hello');
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email_controller.text, password: password_controller.text);
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: reg_email_controller.text,
+          password: reg_password_controller.text);
 
       setState(() {
         isLoading = false;
         isLogin = true;
       });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Registeration succesful')),
+      );
       Navigator.pop(context, true);
-
-      print('hello');
     } on FirebaseAuthException catch (e) {
       setState(() {
         isLoading = false;
@@ -53,13 +55,17 @@ class LoginPage_state extends State<LoginPage> {
     }
   }
 
-  void dispose_un() {
-    email_controller.dispose();
+  Future signOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
+
+  void dispose_em() {
+    reg_email_controller.dispose();
     super.dispose();
   }
 
   void dispose_pw() {
-    password_controller.dispose();
+    reg_password_controller.dispose();
     super.dispose();
   }
 
@@ -136,7 +142,7 @@ class LoginPage_state extends State<LoginPage> {
                               255, 0, 0, 0), // Set the input text color here
                         ),
                         cursorColor: Colors.white,
-                        controller: email_controller,
+                        controller: reg_email_controller,
                         keyboardType: TextInputType.name,
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -173,7 +179,7 @@ class LoginPage_state extends State<LoginPage> {
                               255, 24, 24, 24), // Set the input text color here
                         ),
                         cursorColor: Colors.white,
-                        controller: password_controller,
+                        controller: reg_password_controller,
                         keyboardType: TextInputType.name,
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -245,13 +251,13 @@ class LoginPage_state extends State<LoginPage> {
                     left: 70,
                     top: 565,
                     child: SizedBox(
-                      width: 164,
+                      width: 170,
                       height: 15,
                       child: Text(
-                        "don't have an account?",
+                        "already have an account?",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 16,
+                          fontSize: 15,
                           fontFamily: 'Inria Sans',
                           fontWeight: FontWeight.w400,
                         ),
@@ -259,7 +265,7 @@ class LoginPage_state extends State<LoginPage> {
                     ),
                   ),
                   Positioned(
-                    left: 220,
+                    left: 230,
                     top: 551,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -267,15 +273,16 @@ class LoginPage_state extends State<LoginPage> {
                           shadowColor: Color.fromARGB(0, 255, 255, 255),
                         ),
                         onPressed: () {
-                          Navigator.pushReplacement(
+                          Navigator.pop(context, true);
+                          /*Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => SignupPage(),
+                              builder: (context) => LoginPage(),
                             ),
-                          );
+                          );*/
                         },
                         child: Text(
-                          'create one',
+                          'login',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.blue,
@@ -294,7 +301,7 @@ class LoginPage_state extends State<LoginPage> {
                       child: ElevatedButton(
                         onPressed: () {
                           //if (_formkey.currentState!.validate()) {
-                          signInWithEmailAndPassword();
+                          createUserWithEmailAndPassword();
                         },
                         child: isLoading
                             ? Center(
@@ -302,7 +309,7 @@ class LoginPage_state extends State<LoginPage> {
                                 color: Colors.white,
                               ))
                             : Text(
-                                'Login',
+                                'Register',
                                 style: TextStyle(
                                   color: Color(0xFF000000),
                                   fontSize: 16,
