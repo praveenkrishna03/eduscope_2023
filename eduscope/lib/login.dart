@@ -1,5 +1,8 @@
+import 'package:eduscope_2023/home.dart';
+import 'package:eduscope_2023/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'auth.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -12,16 +15,19 @@ class LoginPage_state extends State<LoginPage> {
   final password_controller = TextEditingController();
   bool isLoading = false;
 
-  signInWithEmailAndPassword() async {
+  Future signInWithEmailAndPassword() async {
     try {
       setState(() {
         isLoading = true;
       });
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      print('hello');
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email_controller.text, password: password_controller.text);
+
       setState(() {
         isLoading = false;
       });
+      print('hello');
     } on FirebaseAuthException catch (e) {
       setState(() {
         isLoading = false;
@@ -248,22 +254,26 @@ class LoginPage_state extends State<LoginPage> {
                     ),
                   ),
                   Positioned(
-                    left: 236,
-                    top: 565,
-                    child: SizedBox(
-                      width: 76,
-                      height: 15,
-                      child: Text(
-                        'create one',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Color(0xFF648CC8),
-                          fontSize: 16,
-                          fontFamily: 'Inria Sans',
-                          fontWeight: FontWeight.w400,
+                    left: 220,
+                    top: 551,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Color.fromARGB(0, 255, 255, 255),
+                          shadowColor: Color.fromARGB(0, 255, 255, 255),
                         ),
-                      ),
-                    ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, 'StartingAnimation');
+                        },
+                        child: Text(
+                          'create one',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 16,
+                            fontFamily: 'Inria Sans',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        )),
                   ),
                   Positioned(
                     left: 90,
@@ -273,9 +283,8 @@ class LoginPage_state extends State<LoginPage> {
                       height: 40,
                       child: ElevatedButton(
                         onPressed: () {
-                          if (_formkey.currentState!.validate()) {
-                            signInWithEmailAndPassword();
-                          }
+                          //if (_formkey.currentState!.validate()) {
+                          signInWithEmailAndPassword();
                         },
                         child: isLoading
                             ? Center(

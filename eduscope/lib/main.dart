@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'login.dart';
 import 'package:flutter/material.dart';
+import 'widget_tree.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,11 +19,12 @@ class Eduscope extends StatelessWidget {
         theme: ThemeData.dark().copyWith(
           scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
         ),
-        home: Scaffold(
+        home: const WidgetTree(),
+        /*home: Scaffold(
           body: ListView(children: [
             StartingAnimation(),
           ]),
-        ),
+        ),*/
         routes: {'login': (context) => LoginPage()});
   }
 }
@@ -38,7 +40,7 @@ class _StartingAnimationState extends State<StartingAnimation> {
     super.initState();
 
     Future.delayed(Duration(seconds: 2), () {
-      Navigator.pushNamed(context, 'login');
+      Navigator.pushNamed(context, 'widget_tree');
     });
   }
 
