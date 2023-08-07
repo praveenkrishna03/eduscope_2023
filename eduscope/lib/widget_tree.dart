@@ -18,6 +18,7 @@ class _WidgetTreeState extends State<WidgetTree> {
         if (snapshot.hasData) {
           return HomePage();
         } else {
+          Navigator.pop(context, LoginPage());
           return LoginPage();
         }
       },
