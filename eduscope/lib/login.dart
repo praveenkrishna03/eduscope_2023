@@ -135,7 +135,7 @@ class LoginPage_state extends State<LoginPage> {
                           color: Color.fromARGB(
                               255, 0, 0, 0), // Set the input text color here
                         ),
-                        cursorColor: Colors.white,
+                        cursorColor: Colors.black,
                         controller: email_controller,
                         keyboardType: TextInputType.name,
                         decoration: InputDecoration(
@@ -172,7 +172,7 @@ class LoginPage_state extends State<LoginPage> {
                           color: Color.fromARGB(
                               255, 24, 24, 24), // Set the input text color here
                         ),
-                        cursorColor: Colors.white,
+                        cursorColor: Colors.black,
                         controller: password_controller,
                         keyboardType: TextInputType.name,
                         decoration: InputDecoration(

@@ -146,7 +146,7 @@ class SignupPage_state extends State<SignupPage> {
                           color: Color.fromARGB(
                               255, 0, 0, 0), // Set the input text color here
                         ),
-                        cursorColor: Colors.white,
+                        cursorColor: Colors.black,
                         controller: reg_email_controller,
                         keyboardType: TextInputType.name,
                         decoration: InputDecoration(
@@ -183,7 +183,7 @@ class SignupPage_state extends State<SignupPage> {
                           color: Color.fromARGB(
                               255, 24, 24, 24), // Set the input text color here
                         ),
-                        cursorColor: Colors.white,
+                        cursorColor: Colors.black,
                         controller: reg_password_controller,
                         keyboardType: TextInputType.name,
                         decoration: InputDecoration(
