@@ -15,6 +15,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading:
+            IconButton(onPressed: () {}, icon: const Icon(Icons.add_circle)),
         actions: [
           IconButton(
               onPressed: () async {
@@ -22,8 +24,33 @@ class HomePage extends StatelessWidget {
               },
               icon: const Icon(Icons.logout))
         ],
+        title: Center(
+          child: Image(
+            alignment: Alignment.center,
+            image: AssetImage(
+                'images/logo.png'), // Specify the image file location here
+            height: 100,
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
-      body: Center(child: Text(user?.email ?? 'user email')),
+
+      body: ListView(
+        children: [
+          Column(
+            children: [
+              Container(
+                width: 360,
+                height: 800,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(color: Colors.white),
+                child: Stack(),
+              ),
+            ],
+          ),
+        ],
+      ),
+      //Center(child: Text(user?.email ?? 'user email')),
     );
   }
 }

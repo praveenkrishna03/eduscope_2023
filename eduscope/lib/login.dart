@@ -214,7 +214,7 @@ class LoginPage_state extends State<LoginPage> {
                       width: 167,
                       height: 18,
                       child: Text(
-                        'username',
+                        'Email',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -231,7 +231,7 @@ class LoginPage_state extends State<LoginPage> {
                       width: 167,
                       height: 18,
                       child: Text(
-                        'password',
+                        'Password',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,

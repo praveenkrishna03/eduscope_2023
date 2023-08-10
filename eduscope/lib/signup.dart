@@ -225,7 +225,7 @@ class SignupPage_state extends State<SignupPage> {
                       width: 167,
                       height: 18,
                       child: Text(
-                        'username',
+                        'Email',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -242,7 +242,7 @@ class SignupPage_state extends State<SignupPage> {
                       width: 167,
                       height: 18,
                       child: Text(
-                        'password',
+                        'Password',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
