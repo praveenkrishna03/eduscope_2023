@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eduscope_2023/home.dart';
 import 'package:eduscope_2023/main.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'auth.dart';
@@ -20,14 +22,28 @@ class SignupPage_state extends State<SignupPage> {
   bool isLoading = false;
 
   Future createUserWithEmailAndPassword() async {
+    
     try {
       setState(() {
         isLoading = true;
       });
-      print('hello');
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: reg_email_controller.text,
           password: reg_password_controller.text);
+
+        String uid = userCredential.user?.uid ?? '';
+     
+      
+      CollectionReference collref= FirebaseFirestore.instance.collection('user');
+      collref.add(
+        {
+          'Name':reg_username_controller.text,
+          'Email':reg_email_controller.text,
+          'Password':reg_password_controller.text,
+          'User Id':uid,
+        }
+      );
 
       setState(() {
         isLoading = false;
@@ -35,6 +51,7 @@ class SignupPage_state extends State<SignupPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Registeration succesful')),
       );
+      
       return HomePage();
       //Navigator.pop(context, 'home');
       /*Navigator.push(
@@ -364,6 +381,7 @@ class SignupPage_state extends State<SignupPage> {
                         onPressed: () {
                           //if (_formkey.currentState!.validate()) {
                           createUserWithEmailAndPassword();
+                          
                         },
                         child: isLoading
                             ? Center(
