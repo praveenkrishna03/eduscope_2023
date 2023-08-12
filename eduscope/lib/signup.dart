@@ -1,3 +1,5 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eduscope_2023/home.dart';
 import 'package:eduscope_2023/main.dart';
@@ -5,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'auth.dart';
+import 'userdata.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -16,7 +19,6 @@ class SignupPage_state extends State<SignupPage> {
   final reg_email_controller = TextEditingController();
   final reg_password_controller = TextEditingController();
   final reg_username_controller=TextEditingController();
-
 
 
   bool isLoading = false;
@@ -33,10 +35,11 @@ class SignupPage_state extends State<SignupPage> {
           password: reg_password_controller.text);
 
         String uid = userCredential.user?.uid ?? '';
+         
      
       
-      CollectionReference collref= FirebaseFirestore.instance.collection('user');
-      collref.add(
+      CollectionReference userdata= FirebaseFirestore.instance.collection('user');
+      userdata.add(
         {
           'Name':reg_username_controller.text,
           'Email':reg_email_controller.text,

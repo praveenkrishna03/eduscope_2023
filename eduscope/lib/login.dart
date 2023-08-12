@@ -79,6 +79,7 @@ class LoginPage_state extends State<LoginPage> {
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(color: Colors.white),
               child: Stack(
+                
                 children: [
                   Positioned(
                     left: 0,
@@ -94,6 +95,7 @@ class LoginPage_state extends State<LoginPage> {
                   Positioned(
                     left: 35,
                     top: 146,
+                    
                     child: Container(
                       width: 310,
                       height: 254,

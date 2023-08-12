@@ -6,6 +6,7 @@ import 'package:eduscope_2023/surf_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'auth.dart';
+import 'userdata.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -39,7 +40,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
   
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         leading:
             IconButton(onPressed: () {}, icon: const Icon(Icons.add_circle)),
         actions: [
@@ -58,7 +59,7 @@ class _HomePageState extends State<HomePage> {
             fit: BoxFit.cover,
           ),
         ),
-      ),
+      ),*/
 
       body: _pages[_currentIndex],
       /*Center(
@@ -102,3 +103,5 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+
