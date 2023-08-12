@@ -1,3 +1,8 @@
+import 'package:eduscope_2023/community_page.dart';
+import 'package:eduscope_2023/feed_page.dart';
+import 'package:eduscope_2023/profile_page.dart';
+import 'package:eduscope_2023/search.dart';
+import 'package:eduscope_2023/surf_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'auth.dart';
@@ -15,16 +20,24 @@ class _HomePageState extends State<HomePage> {
     await Auth().signOut();
   }
 
-  int _selectedIndex = 0;
+  int _currentIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      _currentIndex = index;
     });
   }
+  final List<Widget> _pages = [
+    FeedPage(),
+    SearchPage(),
+    SurfPage(),
+    CommunityPage(),
+    ProfilePage()
+  ];
 
   @override
   Widget build(BuildContext context) {
+  
     return Scaffold(
       appBar: AppBar(
         leading:
@@ -47,14 +60,16 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
 
-      body: Center(
+      body: _pages[_currentIndex],
+      /*Center(
           child: Text(
         user?.email ?? 'user email',
         style: TextStyle(color: Colors.white),
-      )),
+      ))*/
+      
 
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
+        currentIndex: _currentIndex,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.grey, // Set selected icon color

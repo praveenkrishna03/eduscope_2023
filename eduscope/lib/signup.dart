@@ -13,6 +13,9 @@ class SignupPage_state extends State<SignupPage> {
   final _formkey = GlobalKey<FormState>();
   final reg_email_controller = TextEditingController();
   final reg_password_controller = TextEditingController();
+  final reg_username_controller=TextEditingController();
+
+
 
   bool isLoading = false;
 
@@ -202,6 +205,43 @@ class SignupPage_state extends State<SignupPage> {
                       ),
                     ),
                   ),
+                  Positioned(
+                    left: 61,
+                    top: 355,
+                    child: Container(
+                      width: 250,
+                      height: 40,
+                      decoration: ShapeDecoration(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(17),
+                        ),
+                      ),
+                      child: TextFormField(
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color.fromARGB(
+                              255, 24, 24, 24), // Set the input text color here
+                        ),
+                        cursorColor: Colors.black,
+                        controller: reg_username_controller,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                              color: Color.fromARGB(255, 109, 109, 109)),
+                          hintText: 'Enter your name',
+                        ),
+
+                        /*decoration: InputDecoration(
+                        hintStyle: TextStyle(
+                            color: Color.fromARGB(255, 109, 109, 109)),
+                        hintText: 'Enter your pregnant month',
+                      ),
+                      */
+                      ),
+                    ),
+                  ),
                   /*Positioned(
                   left: 106,
                   top: 607,
@@ -218,6 +258,23 @@ class SignupPage_state extends State<SignupPage> {
                     ),
                   ),
                 ),*/
+                Positioned(
+                    left: 69,
+                    top: 330,
+                    child: SizedBox(
+                      width: 167,
+                      height: 18,
+                      child: Text(
+                        'Name',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontFamily: 'Inria Sans',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ),
                   Positioned(
                     left: 69,
                     top: 400,
