@@ -45,6 +45,7 @@ class SignupPage_state extends State<SignupPage> {
           'Email':reg_email_controller.text,
           'Password':reg_password_controller.text,
           'User Id':uid,
+          'Image URL':'',
         }
       );
 
@@ -101,7 +102,7 @@ class SignupPage_state extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       //resizeToAvoidBottomInset: false,
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
