@@ -70,8 +70,12 @@ class LoginPage_state extends State<LoginPage> {
     return Scaffold(
       //resizeToAvoidBottomInset: false,
       body: Center(
-        child: Container(
-          child: Form(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+          
+          children: [Form(
             key: _formkey,
             child: Container(
               width: 386,
@@ -331,7 +335,12 @@ class LoginPage_state extends State<LoginPage> {
               ),
             ),
           ),
+          ]
         ),
+          ],
+        ),
+
+        
       ),
     );
   }

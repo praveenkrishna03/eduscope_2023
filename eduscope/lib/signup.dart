@@ -102,8 +102,12 @@ class SignupPage_state extends State<SignupPage> {
     return Scaffold(
       //resizeToAvoidBottomInset: false,
       body: Center(
-        child: Container(
-          child: Form(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+        
+          children:[ Form(
             key: _formkey,
             child: Container(
               width: 386,
@@ -417,8 +421,11 @@ class SignupPage_state extends State<SignupPage> {
               ),
             ),
           ),
+          ]
         ),
+          ]
       ),
+    ),
     );
   }
 }
