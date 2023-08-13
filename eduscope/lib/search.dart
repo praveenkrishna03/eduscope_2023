@@ -48,7 +48,7 @@ class SearchPage_state extends State<SearchPage> {
           itemBuilder: ((context, index){
             var data=Snapshot.data!.docs[index];
             return ListTile(
-              leading: CircleAvatar(radius: 24,backgroundImage: AssetImage('assets/logo.png'),)
+              leading: CircleAvatar(radius: 24,backgroundImage: AssetImage(''),)
               ,
               title: Text(data['Name']),
               subtitle: Text(data['Email']),
