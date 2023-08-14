@@ -136,7 +136,7 @@ cuser.get().then((querySnapshot) {
               top: 25,
               left: 300,
               child: IconButton(
-                onPressed: selectImage,
+                onPressed: (){},
                 icon: Icon(
                   Icons.settings,
                   size: 25,
@@ -172,30 +172,68 @@ cuser.get().then((querySnapshot) {
             ),
             Positioned(
               top: 80,
-              left: 120,
+              left: 115,
+            child:Row( children:[           SizedBox(
+              //top: 80,
+              //left: 120,
               child: Text('Posts',
               style:TextStyle(
                 fontSize: 16
               )),
             ),
-            Positioned(
-              top: 80,
-              left: 180,
+            SizedBox(width: 20),
+            SizedBox(
+              //top: 80,
+              //left: 180,
               child: Text('Followers',
               style:TextStyle(
                 fontSize: 16
               )),
-            ),
-            Positioned(
-              top: 80,
-              left: 265,
+            ),SizedBox(width: 20),
+            SizedBox(
+              //top: 80,
+              //left: 265,
               child: Text('Following',
               style:TextStyle(
                 fontSize: 16
               )),
+            )])
+        
             ),
-            
             Positioned(
+              top: 100,
+              left: 110,
+            child:Row( children:[         SizedBox(width: 20,)  ,SizedBox(
+              //top: 80,
+              //left: 120,
+              child: Text('0',
+              style:TextStyle(
+                fontSize: 16
+              )),
+            ),
+            SizedBox(width: 60),
+            SizedBox(
+              //top: 80,
+              //left: 180,
+              child: Text('0',
+              style:TextStyle(
+                fontSize: 16
+              )),
+            ),SizedBox(width: 80),
+            SizedBox(
+              //top: 80,
+              //left: 265,
+              child: Text('0',
+              style:TextStyle(
+                fontSize: 16
+              )),
+            )])
+        
+            ),
+              
+            
+            
+           /* Positioned(
               top: 100,
               left: 120,
               child: Text('0',
@@ -218,7 +256,7 @@ cuser.get().then((querySnapshot) {
               style:TextStyle(
                 fontSize: 16
               )),
-            ),
+            ),*/
             
             Positioned(
               top: 150,
@@ -234,7 +272,8 @@ cuser.get().then((querySnapshot) {
                   ),
                 ),
 
-              )
+              ),
+              
           
             
           ],
