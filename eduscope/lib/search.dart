@@ -40,7 +40,8 @@ class SearchPage_state extends State<SearchPage> {
           )
         ),
       
-       body: StreamBuilder<QuerySnapshot>(
+       body:
+        StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('user').orderBy('Name').startAt([searchName]).endAt([searchName + "\uf8ff"]) .snapshots(),
         builder: (context , Snapshot){
           return ListView.builder(

@@ -107,7 +107,7 @@ cuser.get().then((querySnapshot) {
   child:Column(
     children: [
       Container(
-        height: 600,
+        height: 150,
         width: double.infinity,
         color: Color.fromRGBO(41, 41, 41, 0.85),
         child: Stack(
@@ -258,28 +258,26 @@ cuser.get().then((querySnapshot) {
               )),
             ),*/
             
-            Positioned(
-              top: 150,
-
-              child:Container(
-                width: 360,
-                  height: 500,
-                  decoration: ShapeDecoration(
-                    color: Colors.white.withOpacity(0.8500000238418579),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-
-              ),
+            
               
           
             
           ],
         ),
       ),
+    SizedBox(
+      child:Row(
+        children: [
+
+        ],
+      )
+              //top: 150,
+
+              
+
+              ),
     ],
+    
   ),
 )
         );
