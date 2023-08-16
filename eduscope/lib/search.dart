@@ -1,17 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'account_search_page.dart';
+import 'media_search_page.dart';
+import 'document_search_page.dart';
+import 'test_search_page.dart';
 
 class SearchPage extends StatefulWidget {
+
+  
   SearchPage({super.key});
+  
   @override
   SearchPage_state createState() => SearchPage_state();
 }
 
 class SearchPage_state extends State<SearchPage> {
-  var searchName="";
+  var searchName = "";
+
+  int _currentIndex = 0;
+  void _onItemTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  final List<Widget> _search_pages = [
+    AccountSearchPage(searchName:""),
+    MediaSearchPage(),
+    DocumentSearchPage(),
+    TestSearchPage(),
+  ];
+  
+
   @override
   Widget build(BuildContext context) {
+    _search_pages[0] = AccountSearchPage(searchName: searchName);
     return Scaffold(
       appBar: AppBar(
         //backgroundColor: Colors.black,
@@ -39,28 +62,47 @@ class SearchPage_state extends State<SearchPage> {
             ),
           )
         ),
+      body:Column(
+        children:[
+BottomNavigationBar(
+              backgroundColor: Color.fromARGB(255, 94, 95, 95),
+              currentIndex: _currentIndex,
+              onTap: _onItemTapped,
+              type: BottomNavigationBarType.fixed,
+              selectedItemColor: Colors.grey, // Set selected icon color
+              unselectedItemColor: Colors.white,
+              iconSize: 20,
+              items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              label: 'Accounts', // Text label for the first item
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.video_collection),
+              label: 'Media', // Text label for the second item
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.perm_media),
+              label: 'Documents', // Text label for the third item
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.edit_note),
+              label: 'Tests', // Text label for the fourth item
+            ),
+          ],
+            ),
+            Expanded(
+            child: _search_pages[_currentIndex],
+          ),
+        ]
+      ),
+          
+          );
       
-       body:
-        StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('user').orderBy('Name').startAt([searchName]).endAt([searchName + "\uf8ff"]) .snapshots(),
-        builder: (context , Snapshot){
-          return ListView.builder(
-          itemCount:Snapshot.data!.docs.length,
-          itemBuilder: ((context, index){
-            var data=Snapshot.data!.docs[index];
-            return ListTile(
-              leading: CircleAvatar(radius: 24,backgroundImage: NetworkImage(data['Image URL'!]),)
-              ,
-              title: Text(data['Name']),
-              subtitle: Text(data['Email']),
-            );
-          }),
-        );
 
-        }
+
         
-      )
       
-    );
+    
   }
 }
