@@ -6,10 +6,9 @@ import 'package:eduscope_2023/util.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'signup.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'util.dart';
+
 
 class ProfilePage extends StatefulWidget {
   @override

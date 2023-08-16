@@ -1,3 +1,4 @@
+import 'package:eduscope_2023/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -24,6 +25,13 @@ class AccountSearchPage_state extends State<AccountSearchPage> {
           itemBuilder: ((context, index){
             var data=Snapshot.data!.docs[index];
             return ListTile(
+              onTap: () {
+                
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>  ProfileViewPage(uid:data['User Id'],imgurl:data['Image URL'])),
+              );
+              },
               leading: CircleAvatar(radius: 24,backgroundImage: NetworkImage(data['Image URL'!]),)
               ,
               title: Text(data['Name']),
