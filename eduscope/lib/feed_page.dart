@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FeedPage extends StatefulWidget {
   @override
@@ -8,6 +11,7 @@ class FeedPage extends StatefulWidget {
 }
 
 class FeedPage_state extends State<FeedPage> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
