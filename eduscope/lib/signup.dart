@@ -7,7 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'auth.dart';
-import 'userdata.dart';
+import 'user_model.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -36,18 +36,10 @@ class SignupPage_state extends State<SignupPage> {
 
         String uid = userCredential.user?.uid ?? '';
          
-     
+     UserModel user =UserModel(email: reg_email_controller.text, name: reg_username_controller.text, password: reg_password_controller.text, imageurl:'', uid: uid, followers: [], following: [],posts: 0);
       
       CollectionReference userdata= FirebaseFirestore.instance.collection('user');
-      userdata.add(
-        {
-          'Name':reg_username_controller.text,
-          'Email':reg_email_controller.text,
-          'Password':reg_password_controller.text,
-          'User Id':uid,
-          'Image URL':'',
-        }
-      );
+      userdata.add(user.toJson());
 
       setState(() {
         isLoading = false;
@@ -80,7 +72,7 @@ class SignupPage_state extends State<SignupPage> {
         return ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('invalid email format')),
         );
-      }
+      } 
     }
   }
 

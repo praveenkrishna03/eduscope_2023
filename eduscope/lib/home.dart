@@ -6,7 +6,7 @@ import 'package:eduscope_2023/surf_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'auth.dart';
-import 'userdata.dart';
+
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -15,7 +15,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String uid='';
   final User? user = Auth().currentUser;
+  FirebaseAuth _auth=FirebaseAuth.instance;
 
   Future<void> signOut() async {
     await Auth().signOut();
@@ -28,16 +30,21 @@ class _HomePageState extends State<HomePage> {
       _currentIndex = index;
     });
   }
-  final List<Widget> _pages = [
-    FeedPage(),
-    SearchPage(),
-    SurfPage(),
-    CommunityPage(),
-    ProfilePage()
-  ];
+  
 
   @override
   Widget build(BuildContext context) {
+    User? user=_auth.currentUser;
+       uid=user?.uid??'';
+
+    final List<Widget> _pages = [
+    FeedPage(uid:uid),
+    SearchPage(),
+    SurfPage(),
+    CommunityPage(),
+    ProfilePage(uid:uid),
+  ];
+
   
     return Scaffold(
       /*appBar: AppBar(
@@ -73,6 +80,7 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _currentIndex,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
+        backgroundColor: Color.fromARGB(255, 68, 68, 68),
         selectedItemColor: Colors.grey, // Set selected icon color
         unselectedItemColor: Colors.white,
         iconSize: 40,

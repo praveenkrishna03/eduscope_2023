@@ -78,6 +78,7 @@ class ProfileViewPage_state extends State<ProfileViewPage> {
             
             Positioned(
               top: 30,
+              left: 120,
               child: Column(
                 crossAxisAlignment:CrossAxisAlignment.start,
                   
@@ -98,14 +99,12 @@ class ProfileViewPage_state extends State<ProfileViewPage> {
                       color: Colors.white,
                       fontSize: 14,
                     ),
+                    
                   ),
-                ],
-              ),
-            ),
-            Positioned(
-              top: 80,
-              left: 115,
-            child:Row( children:[           SizedBox(
+                  SizedBox(height: 10,),
+                  Positioned(
+                    
+                   child:Row( children:[           SizedBox(
               //top: 80,
               //left: 120,
               child: Text('Posts',
@@ -130,11 +129,10 @@ class ProfileViewPage_state extends State<ProfileViewPage> {
                 fontSize: 16
               )),
             )])
-        
-            ),
-            Positioned(
+                  ),
+                  Positioned(
               top: 100,
-              left: 110,
+              left: 100,
             child:Row( children:[         SizedBox(width: 20,)  ,SizedBox(
               //top: 80,
               //left: 120,
@@ -162,6 +160,11 @@ class ProfileViewPage_state extends State<ProfileViewPage> {
             )])
         
             ),
+
+
+                ],
+              ),
+            ), 
           ],
         ),
       ),

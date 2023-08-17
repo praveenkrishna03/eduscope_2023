@@ -11,28 +11,32 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 
 class ProfilePage extends StatefulWidget {
+  final String uid;
+  
+  ProfilePage({required this.uid});
+
   @override
   ProfilePage_state createState() => ProfilePage_state();
 }
 
 class ProfilePage_state extends State<ProfilePage> {
-  FirebaseAuth _auth=FirebaseAuth.instance;
+  
   final FirebaseStorage _storage=FirebaseStorage.instance;
   
   String _imgurl='';
   Uint8List? _image;
   void selectImage() async{
-    User? user=_auth.currentUser;
-       String uid=user?.uid??'';
-
+    String uid=widget.uid;
     Uint8List img= await pickImage(ImageSource.gallery);
+    
+    
     String imgurl=await uploadImageToStorage('$uid',img);
     setState(() {
      _image= img; 
      _imgurl=imgurl;
     });
     print(_imgurl);
-     final cuser = FirebaseFirestore.instance.collection('user').where('User Id', isEqualTo:uid);
+     final cuser = FirebaseFirestore.instance.collection('user').where('User Id', isEqualTo:widget.uid);
 
 cuser.get().then((querySnapshot) {
   if (querySnapshot.size > 0) {
@@ -59,9 +63,7 @@ cuser.get().then((querySnapshot) {
   @override
   
   Widget build(BuildContext context) {
-    User? user=_auth.currentUser;
-       String uid=user?.uid??'';
-
+    
       
 
 
@@ -87,7 +89,7 @@ cuser.get().then((querySnapshot) {
       ),
       
       body:StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('user').where('User Id',isEqualTo:uid).snapshots(),
+        stream: FirebaseFirestore.instance.collection('user').where('User Id',isEqualTo:widget.uid).snapshots(),
         
           builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -145,6 +147,7 @@ cuser.get().then((querySnapshot) {
             ),
             Positioned(
               top: 30,
+              left: 120,
               child: Column(
                 crossAxisAlignment:CrossAxisAlignment.start,
                   
@@ -165,14 +168,12 @@ cuser.get().then((querySnapshot) {
                       color: Colors.white,
                       fontSize: 14,
                     ),
+                    
                   ),
-                ],
-              ),
-            ),
-            Positioned(
-              top: 80,
-              left: 115,
-            child:Row( children:[           SizedBox(
+                  SizedBox(height: 10,),
+                  Positioned(
+                    
+                   child:Row( children:[           SizedBox(
               //top: 80,
               //left: 120,
               child: Text('Posts',
@@ -197,11 +198,10 @@ cuser.get().then((querySnapshot) {
                 fontSize: 16
               )),
             )])
-        
-            ),
-            Positioned(
+                  ),
+                  Positioned(
               top: 100,
-              left: 110,
+              left: 100,
             child:Row( children:[         SizedBox(width: 20,)  ,SizedBox(
               //top: 80,
               //left: 120,
@@ -229,6 +229,15 @@ cuser.get().then((querySnapshot) {
             )])
         
             ),
+
+
+                ],
+              ),
+            ),
+           
+        
+            
+            
               
             
             

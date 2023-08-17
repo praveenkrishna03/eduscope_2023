@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'login.dart';
 import 'package:flutter/material.dart';
 import 'widget_tree.dart';
-import 'userdata.dart';
+import 'user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
@@ -25,9 +25,7 @@ class Eduscope extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData.dark().copyWith(
-          scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
-        ),
+        theme: ThemeData.dark(),
         home: const WidgetTree(),
         /*home: Scaffold(
           body: ListView(children: [
