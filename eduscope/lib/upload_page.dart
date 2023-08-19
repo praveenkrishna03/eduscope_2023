@@ -16,7 +16,8 @@ import 'profile_page.dart';
 
 class UploadPage extends StatefulWidget{
   final String uid;
-  UploadPage({required this.uid});
+  final String type;
+  UploadPage({required this.uid,required this.type});
 
   @override
   UploadPageState createState()=> UploadPageState();
@@ -40,13 +41,13 @@ class UploadPageState extends State<UploadPage>{
   Uint8List? _file;
 
 
-    void pickfile() async{
+    void pickfile_image() async{
     try{
       setState(() {
         isLoading=true;
       });
 
-      result= await FilePicker.platform.pickFiles(type: FileType.any);
+      result= await FilePicker.platform.pickFiles(type: FileType.image);
       
       if(result!=null){
         
@@ -70,6 +71,69 @@ class UploadPageState extends State<UploadPage>{
       print(e);
     }
   }
+
+  void pickfile_video() async{
+    try{
+      setState(() {
+        isLoading=true;
+      });
+
+      result= await FilePicker.platform.pickFiles(type: FileType.video);
+      
+      if(result!=null){
+        
+          filename=result!.files.first.name;
+          pickedfile=result!.files.first;
+  //        pickedfile=result!.files.first;
+          fileToDisplay=File(pickedfile!.path.toString());
+
+          print(pickedfile!.name);
+          print(pickedfile!.path);
+          print(pickedfile!.extension);
+          print(pickedfile!.bytes);
+      }
+
+      setState(() {
+        isLoading=false;
+      });
+
+    }
+    catch(e){
+      print(e);
+    }
+  }
+
+      void pickfile_document() async{
+    try{
+      setState(() {
+        isLoading=true;
+      });
+
+      result= await FilePicker.platform.pickFiles(type: FileType.custom,allowedExtensions: ['pdf']);
+      
+      if(result!=null){
+        
+          filename=result!.files.first.name;
+          pickedfile=result!.files.first;
+  //        pickedfile=result!.files.first;
+          fileToDisplay=File(pickedfile!.path.toString());
+
+          print(pickedfile!.name);
+          print(pickedfile!.path);
+          print(pickedfile!.extension);
+          print(pickedfile!.bytes);
+      }
+
+      setState(() {
+        isLoading=false;
+      });
+
+    }
+    catch(e){
+      print(e);
+    }
+  }
+      
  
 
 
@@ -85,13 +149,14 @@ class UploadPageState extends State<UploadPage>{
         final uploadTask=ref.putFile(fileToDisplay);
        uploadTask.then((TaskSnapshot snapshot) async {
       String downloadURL = await snapshot.ref.getDownloadURL();
-      PostModel post =PostModel(username:'',
+      PostModel post =PostModel(
+        username:'',
         postname:filename,
         posturl:postURL,
         uid:widget.uid,
         datepublished:DateTime.now(),
         profileURL:'',
-        type:'',
+        type:widget.type,
         likes:0,);
 
         CollectionReference userdata= FirebaseFirestore.instance.collection('posts');
@@ -141,7 +206,7 @@ class UploadPageState extends State<UploadPage>{
 
 
       String uid=widget.uid;
-      String destination='$uid-post';
+      String destination='$uid-$filename';
         
 
 
@@ -173,6 +238,7 @@ class UploadPageState extends State<UploadPage>{
                     mainAxisAlignment: MainAxisAlignment.center,
                       children:[
                           SizedBox(height: 20,),
+
                           Center(child:isLoading?
                           CircularProgressIndicator() :TextButton(
                             style:ButtonStyle(
@@ -180,7 +246,18 @@ class UploadPageState extends State<UploadPage>{
                           
                             ),
                             onPressed:(){
-                             pickfile();
+                              if(widget.type=='image'){
+                                  pickfile_image();
+                              }
+                              else if(widget.type=='video'){
+                                 pickfile_video();
+                              }
+                              else if(widget.type=='document'){
+                                 pickfile_document();
+                              }
+                              
+
+                             
                           },
                           child:const Text(
                             'Select File',

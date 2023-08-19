@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:eduscope_2023/upload_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -24,12 +25,91 @@ class FeedPage_state extends State<FeedPage> {
       appBar: AppBar(
        leading:
             IconButton(onPressed: () {
-                Navigator.push(
+                  showModalBottomSheet(context: context, builder: (BuildContext context){
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                          children:[
+                              OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  padding: EdgeInsets.symmetric(vertical: 10.0), // Adjust the padding
+                                ),
+                                onPressed:(){
+                                  Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UploadPage(uid:widget.uid,type: 'image',),
+                            ),
+                          );
+
+                              }, child: Row(
+                                children: [
+                                  Icon(Icons.image),
+                                  SizedBox(width: 10,),
+                                  Text('Image')
+
+                                ],
+                              )
+                              ),
+                              SizedBox(height: 20,),
+                              OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  padding: EdgeInsets.symmetric(vertical: 10.0), // Adjust the padding
+                                ),
+                                onPressed:(){
+                                  Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UploadPage(uid:widget.uid,type: 'video',),
+                            ),
+                          );
+                                
+
+                              }, child: Row(
+                                children: [
+                                  Icon(Icons.video_file),
+                                  SizedBox(width: 10,),
+                                  Text('Video')
+
+                                ],
+                              )
+                              ),
+                              SizedBox(height: 20,),
+                              OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  padding: EdgeInsets.symmetric(vertical: 10.0), // Adjust the padding
+                                ),
+                                onPressed:(){
+
+                                  Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UploadPage(uid:widget.uid,type: 'document',),
+                            ),
+                          );
+                              }, child: Row(
+                                children: [
+                                  Icon(Icons.upload_file),
+                                  SizedBox(width: 10,),
+                                  Text('Document')
+
+                                ],
+                              )
+                              ),
+
+
+                          ]
+                    );
+                  });
+
+
+
+                /*Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => UploadPage(uid:widget.uid),
                             ),
-                          );
+                          );*/
             }, icon: const Icon(Icons.add_circle)),
         actions: [
           IconButton(
