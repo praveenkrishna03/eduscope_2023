@@ -7,7 +7,7 @@ import 'package:eduscope_2023/util.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'settings_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 
@@ -139,7 +139,9 @@ cuser.get().then((querySnapshot) {
               left: 300,
               child: IconButton(
                 onPressed: (){
-                  SettingsHomePage(uid: uid);
+                  Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => SettingsHomePage(uid:uid),
+                            ),);
                 },
                 icon: Icon(
                   Icons.settings,
