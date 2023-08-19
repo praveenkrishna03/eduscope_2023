@@ -56,12 +56,15 @@ class ProfileViewPage_state extends State<ProfileViewPage> {
         String name = document?['Name'] as String? ?? 'No Name';
         String email = document?['Email'] as String? ?? 'No Email';
         String Profile_URL =document?['Image URL'] as String? ??'No Image';
+
+        var postSnap= FirebaseFirestore.instance.collection('user').where('User Id',isEqualTo:widget.uid).get;
+        
         return Scaffold(
   body:SingleChildScrollView(
   child:Column(
     children: [
       Container(
-        height: 150,
+        height: 170,
         width: double.infinity,
         color: Color.fromRGBO(41, 41, 41, 0.85),
         child: Stack(
@@ -157,10 +160,20 @@ class ProfileViewPage_state extends State<ProfileViewPage> {
               style:TextStyle(
                 fontSize: 16
               )),
-            )])
+            ),
+            
+            ])
         
             ),
+            
+            
+            Center(child:ElevatedButton(onPressed: (){
+          
 
+            },
+            child:Container(
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 50),
+            child:Text('Follow')),)),
 
                 ],
               ),

@@ -4,10 +4,13 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eduscope_2023/firebase_api.dart';
+import 'package:eduscope_2023/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
+import 'post_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'profile_page.dart';
 
 
 
@@ -20,10 +23,13 @@ class UploadPage extends StatefulWidget{
 }
 
 class UploadPageState extends State<UploadPage>{
+
+  final FirebaseStorage _storage=FirebaseStorage.instance;
+  
     
     FilePickerResult? result;
 
-  String? filename;
+  String filename='';
   PlatformFile? pickedfile;
   
   bool isLoading=false;
@@ -64,9 +70,11 @@ class UploadPageState extends State<UploadPage>{
       print(e);
     }
   }
+ 
+
 
      UploadTask? uploadFile(String destination,File fileToDisplay) {
-      String? postURL;
+      String postURL='';
       try{
         setState(() {
           isLoading_2=true;
@@ -77,6 +85,18 @@ class UploadPageState extends State<UploadPage>{
         final uploadTask=ref.putFile(fileToDisplay);
        uploadTask.then((TaskSnapshot snapshot) async {
       String downloadURL = await snapshot.ref.getDownloadURL();
+      PostModel post =PostModel(username:'',
+        postname:filename,
+        posturl:postURL,
+        uid:widget.uid,
+        datepublished:DateTime.now(),
+        profileURL:'',
+        type:'',
+        likes:0,);
+
+        CollectionReference userdata= FirebaseFirestore.instance.collection('posts');
+      userdata.add(post.toJson());
+
       setState(() {
         isLoading_2 = false;
       });
@@ -118,8 +138,13 @@ class UploadPageState extends State<UploadPage>{
 
     @override
     Widget build(BuildContext context) {
+
+
       String uid=widget.uid;
       String destination='$uid-post';
+        
+
+
         return Scaffold(
           appBar: AppBar(
        leading:

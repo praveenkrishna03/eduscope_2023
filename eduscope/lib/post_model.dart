@@ -1,17 +1,17 @@
-class UserModel{
+class PostModel{
   final String username;
   final String postname;
-  final String description;
   final String posturl;
   final String uid;
-  final String datepublished;
+  final datepublished;
   final String profileURL;
+  final String type;
   final likes;
 
-  const UserModel({
+  const PostModel({
+    required this.type,
     required this.username,
     required this.postname,
-    required this.description,
     required this.posturl,
     required this.uid,
     required this.datepublished,
@@ -22,7 +22,6 @@ class UserModel{
   "Username": username,
   "Post Name": postname,
   "Profile URL":profileURL,
-  "Description":description,
   "User Id":uid,
   "Date Published":datepublished,
   "Post URL":posturl,

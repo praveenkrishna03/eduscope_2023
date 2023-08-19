@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eduscope_2023/settings_home.dart';
 import 'package:eduscope_2023/util.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +64,7 @@ cuser.get().then((querySnapshot) {
   @override
   
   Widget build(BuildContext context) {
-    
+    String uid=widget.uid;
       
 
 
@@ -137,7 +138,9 @@ cuser.get().then((querySnapshot) {
               top: 25,
               left: 300,
               child: IconButton(
-                onPressed: (){},
+                onPressed: (){
+                  SettingsHomePage(uid: uid);
+                },
                 icon: Icon(
                   Icons.settings,
                   size: 25,
