@@ -37,11 +37,8 @@ class SettingsHomePage_State extends State<SettingsHomePage> {
           ),
         ),
       ),
-      body: 
-        Container(
-          color: Colors.white,
-          
-          ),
+      
+        
         
       
     );
