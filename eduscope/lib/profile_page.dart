@@ -109,7 +109,7 @@ cuser.get().then((querySnapshot) {
   child:Column(
     children: [
       Container(
-        height: 170,
+        height: 200,
         width: double.infinity,
         color: Color.fromRGBO(41, 41, 41, 0.85),
         child: Stack(
@@ -151,7 +151,7 @@ cuser.get().then((querySnapshot) {
               
             ),
             Positioned(
-              top: 30,
+              top: 50,
               left: 120,
               child: Column(
                 crossAxisAlignment:CrossAxisAlignment.start,
@@ -186,7 +186,7 @@ cuser.get().then((querySnapshot) {
                 fontSize: 16
               )),
             ),
-            SizedBox(width: 20),
+            SizedBox(width: 10),
             SizedBox(
               //top: 80,
               //left: 180,
@@ -194,7 +194,7 @@ cuser.get().then((querySnapshot) {
               style:TextStyle(
                 fontSize: 16
               )),
-            ),SizedBox(width: 20),
+            ),SizedBox(width: 10),
             SizedBox(
               //top: 80,
               //left: 265,
@@ -207,7 +207,8 @@ cuser.get().then((querySnapshot) {
                   Positioned(
               top: 100,
               left: 100,
-            child:Row( children:[         SizedBox(width: 20,)  ,SizedBox(
+            child:Row( children:[         
+              SizedBox(width: 20,)  ,SizedBox(
               //top: 80,
               //left: 120,
               child: Text('0',
@@ -223,7 +224,7 @@ cuser.get().then((querySnapshot) {
               style:TextStyle(
                 fontSize: 16
               )),
-            ),SizedBox(width: 80),
+            ),SizedBox(width: 60),
             SizedBox(
               //top: 80,
               //left: 265,
