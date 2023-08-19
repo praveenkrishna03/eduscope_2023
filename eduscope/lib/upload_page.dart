@@ -27,6 +27,7 @@ class UploadPageState extends State<UploadPage>{
 
   final FirebaseStorage _storage=FirebaseStorage.instance;
   
+  
     
     FilePickerResult? result;
 
@@ -137,7 +138,36 @@ class UploadPageState extends State<UploadPage>{
  
 
 
-     UploadTask? uploadFile(String destination,File fileToDisplay) {
+     
+
+
+    @override
+    Widget build(BuildContext snapshot) {
+      
+
+
+      String uid=widget.uid;
+      String destination='$uid-$filename';
+
+      
+      return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('user').where('User Id',isEqualTo:widget.uid).snapshots(),
+        
+          builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+        
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+             var document = snapshot.data!.docs.isNotEmpty ? snapshot.data!.docs[0] : null;
+        String name = document?['Name'] as String? ?? 'No Name';
+        String email = document?['Email'] as String? ?? 'No Email';
+        String Profile_URL =document?['Image URL'] as String? ??'No Image';
+
+
+        UploadTask? uploadFile(String destination,File fileToDisplay) {
       String postURL='';
       try{
         setState(() {
@@ -148,14 +178,14 @@ class UploadPageState extends State<UploadPage>{
         
         final uploadTask=ref.putFile(fileToDisplay);
        uploadTask.then((TaskSnapshot snapshot) async {
-      String downloadURL = await snapshot.ref.getDownloadURL();
+      String postURL = await snapshot.ref.getDownloadURL();
       PostModel post =PostModel(
-        username:'',
+        username:'$name',
         postname:filename,
         posturl:postURL,
         uid:widget.uid,
         datepublished:DateTime.now(),
-        profileURL:'',
+        profileURL:'$Profile_URL',
         type:widget.type,
         likes:0,);
 
@@ -198,17 +228,6 @@ class UploadPageState extends State<UploadPage>{
 });*/
       
       }
-
-    
-
-    @override
-    Widget build(BuildContext context) {
-
-
-      String uid=widget.uid;
-      String destination='$uid-$filename';
-        
-
 
         return Scaffold(
           appBar: AppBar(
@@ -302,6 +321,10 @@ class UploadPageState extends State<UploadPage>{
                 
           
             
-        
+           
   }
+  
+      );
+
+}
 }

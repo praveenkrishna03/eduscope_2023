@@ -1,6 +1,9 @@
+
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eduscope_2023/feed_post_card.dart';
 import 'package:eduscope_2023/upload_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -44,9 +47,11 @@ class FeedPage_state extends State<FeedPage> {
 
                               }, child: Row(
                                 children: [
-                                  Icon(Icons.image),
+                                  SizedBox(width: 20,),
+                                  Icon(Icons.image,color: Colors.white,),
                                   SizedBox(width: 10,),
-                                  Text('Image')
+                                  Text('Image',
+                                  style: TextStyle(color: Colors.white),)
 
                                 ],
                               )
@@ -67,9 +72,10 @@ class FeedPage_state extends State<FeedPage> {
 
                               }, child: Row(
                                 children: [
-                                  Icon(Icons.video_file),
+                                  SizedBox(width: 20,),
+                                  Icon(Icons.video_file,color: Colors.white,),
                                   SizedBox(width: 10,),
-                                  Text('Video')
+                                  Text('Video',style: TextStyle(color: Colors.white))
 
                                 ],
                               )
@@ -89,9 +95,10 @@ class FeedPage_state extends State<FeedPage> {
                           );
                               }, child: Row(
                                 children: [
-                                  Icon(Icons.upload_file),
+                                  SizedBox(width: 20,),
+                                  Icon(Icons.upload_file,color: Colors.white,),
                                   SizedBox(width: 10,),
-                                  Text('Document')
+                                  Text('Document',style: TextStyle(color: Colors.white))
 
                                 ],
                               )
@@ -128,12 +135,25 @@ class FeedPage_state extends State<FeedPage> {
           ),
         ),
       ),
-      body: 
-      Center(
-          child: Text(
-        'Feed Page',
-        style: TextStyle(color: Colors.white),
-      )));
+      body:StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+        builder: (Context, AsyncSnapshot<QuerySnapshot<Map<String,dynamic>>>snapshot){
+          if(snapshot.connectionState==ConnectionState.waiting){
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) => 
+
+             FeedPostCard(snap: snapshot.data!.docs[index].data(),),
+          );
+          
+        },
+        )
+    );
+      
     
   }
 }
