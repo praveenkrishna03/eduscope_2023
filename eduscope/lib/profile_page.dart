@@ -109,7 +109,7 @@ cuser.get().then((querySnapshot) {
   child:Column(
     children: [
       Container(
-        height: 150,
+        height: 170,
         width: double.infinity,
         color: Color.fromRGBO(41, 41, 41, 0.85),
         child: Stack(
@@ -278,7 +278,7 @@ cuser.get().then((querySnapshot) {
           ],
         ),
       ),
-    SizedBox(
+    /*SizedBox(
       child:Row(
         children: [
 
@@ -288,7 +288,7 @@ cuser.get().then((querySnapshot) {
 
               
 
-              ),
+              ),*/
     ],
     
   ),
