@@ -151,95 +151,60 @@ cuser.get().then((querySnapshot) {
               
             ),
             Positioned(
-              top: 50,
+              top: 40,
               left: 120,
               child: Column(
-                crossAxisAlignment:CrossAxisAlignment.start,
-                  
-                children: [
-                  Text(
-                    
-                    '$name',
-                    style: TextStyle(
+                crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                SizedBox(height: 20,
+                child: Text('$name',
+                style: TextStyle(
                         
                       color: Colors.white,
                       fontSize: 18,
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    '$email',
-                    style: TextStyle(
+                    ),),
+                ),
+                SizedBox(
+                  height: 20,
+                  child: Text('$email',
+                  style: TextStyle(
+                        
                       color: Colors.white,
                       fontSize: 14,
-                    ),
-                    
+                    ),),
+                ),
+                SizedBox(
+                  height: 40,
+                  child: Row(
+                    children: [
+                      Text('Posts'),
+                      SizedBox(width: 20,),
+                      Text('Followers'),
+                      SizedBox(width: 20,),
+                      Text('Following'),
+                    ],
                   ),
-                  SizedBox(height: 10,),
-                  Positioned(
-                    
-                   child:Row( children:[           SizedBox(
-              //top: 80,
-              //left: 120,
-              child: Text('Posts',
-              style:TextStyle(
-                fontSize: 16
-              )),
-            ),
-            SizedBox(width: 10),
-            SizedBox(
-              //top: 80,
-              //left: 180,
-              child: Text('Followers',
-              style:TextStyle(
-                fontSize: 16
-              )),
-            ),SizedBox(width: 10),
-            SizedBox(
-              //top: 80,
-              //left: 265,
-              child: Text('Following',
-              style:TextStyle(
-                fontSize: 16
-              )),
-            )])
+                ),
+                SizedBox(
+                  height: 20,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(width: 15,),
+                      Text('0'),
+                      SizedBox(width: 60,),
+                      Text('0'),
+                      SizedBox(width: 60,),
+                      Text('0'),
+                    ],
                   ),
-                  Positioned(
-              top: 100,
-              left: 100,
-            child:Row( children:[         
-              SizedBox(width: 20,)  ,SizedBox(
-              //top: 80,
-              //left: 120,
-              child: Text('0',
-              style:TextStyle(
-                fontSize: 16
-              )),
-            ),
-            SizedBox(width: 60),
-            SizedBox(
-              //top: 80,
-              //left: 180,
-              child: Text('0',
-              style:TextStyle(
-                fontSize: 16
-              )),
-            ),SizedBox(width: 60),
-            SizedBox(
-              //top: 80,
-              //left: 265,
-              child: Text('0',
-              style:TextStyle(
-                fontSize: 16
-              )),
-            )])
-        
-            ),
+                )
 
+                
+              ],
 
-                ],
-              ),
-            ),
+            ))
            
         
             
