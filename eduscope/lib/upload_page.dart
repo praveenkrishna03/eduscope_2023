@@ -136,7 +136,8 @@ class UploadPageState extends State<UploadPage>{
   }
       
  
-
+  List<String> subjects=["Tamil","English","Maths","Science","Social Science"];
+  bool displaysubjects=false;
 
      
 
@@ -189,8 +190,31 @@ class UploadPageState extends State<UploadPage>{
         type:widget.type,
         likes:0,);
 
+        PostModel post_doc =PostModel(
+        username:'$name',
+        postname:filename,
+        posturl:'https://firebasestorage.googleapis.com/v0/b/eduscope-7f35b.appspot.com/o/document.jpg?alt=media&token=bfb68b93-6629-417b-83e0-1e66ee5da997',
+        uid:widget.uid,
+        datepublished:DateTime.now(),
+        profileURL:'$Profile_URL',
+        type:widget.type,
+        likes:0,);
+
+      
+
+        if(widget.type=='image'){
         CollectionReference userdata= FirebaseFirestore.instance.collection('posts');
       userdata.add(post.toJson());
+        }
+        else if(widget.type=='document'){
+          CollectionReference userdata= FirebaseFirestore.instance.collection('posts');
+      userdata.add(post_doc.toJson());
+        }
+        else if(widget.type=='video'){
+          CollectionReference userdata= FirebaseFirestore.instance.collection('reels');
+      userdata.add(post.toJson());
+        }
+
 
       setState(() {
         isLoading_2 = false;
@@ -228,6 +252,8 @@ class UploadPageState extends State<UploadPage>{
 });*/
       
       }
+
+      TextEditingController controller=new TextEditingController();
 
         return Scaffold(
           appBar: AppBar(
@@ -293,6 +319,50 @@ class UploadPageState extends State<UploadPage>{
                               SizedBox(height: 10,),
                               SizedBox(height: 50,child:Text('$filename')),
                               SizedBox(height: 10,),
+                              /*Container(
+                                height: 60,
+                                width: 200,
+                                child:TextField(
+                                  controller: controller,
+                                  
+                                decoration: InputDecoration(
+                                  //hintText: 'Select subject',
+                                  suffixIcon: 
+                                  GestureDetector(
+                                    onTap: (){
+                                        setState(() {
+                                          if(displaysubjects==false){
+                                          displaysubjects=true;
+                                          }
+                                          else{
+                                            displaysubjects=false;
+                                          }
+                                        });
+                                    },
+                                    child:Icon(Icons.arrow_drop_down)),
+                                ),
+                              ),
+                              ),
+                              displaysubjects?Container(
+                                height: 200,
+                                width: 230,
+                                child: ListView.builder(
+                                  itemCount: subjects.length,
+                                  itemBuilder:((context, index){
+
+                                  return GestureDetector( 
+                                    onTap: () {
+                                      setState(() {
+                                        controller.text=(index+1).toString();
+                                      });
+                                    },
+                                  child:ListTile(
+                                    title: Text(subjects[index]),
+                                  )
+                                  );
+                                }
+                                )),
+                              ):SizedBox(height: 10,),*/
                               SizedBox(
                               child:isLoading_2?CircularProgressIndicator():TextButton(
                                 style:ButtonStyle(
