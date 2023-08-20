@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:ffi';
 import 'dart:typed_data';
 import 'dart:io';
 
@@ -17,6 +19,7 @@ import 'profile_page.dart';
 class UploadPage extends StatefulWidget{
   final String uid;
   final String type;
+  
   UploadPage({required this.uid,required this.type});
 
   @override
@@ -24,6 +27,14 @@ class UploadPage extends StatefulWidget{
 }
 
 class UploadPageState extends State<UploadPage>{
+            var hintext_sub='Select subject';
+        var hintext_chap='Select Chapter';
+        var hintext_class='Select Class';
+        bool displaysubjects=false;
+  bool displaychapters=false;
+  bool displayclass=false;
+  
+        
 
   final FirebaseStorage _storage=FirebaseStorage.instance;
   
@@ -135,15 +146,16 @@ class UploadPageState extends State<UploadPage>{
     }
   }
       
- 
-  List<String> subjects=["Tamil","English","Maths","Science","Social Science"];
-  bool displaysubjects=false;
-
-     
 
 
     @override
     Widget build(BuildContext snapshot) {
+  
+ 
+  List<String> subjects=["Tamil","English","Maths","Science","Social Science"];
+  List<String> chapter=["1","2","3","4","5","6","7","8","9","10","11","12"];
+  List<String> classes=["6","7","8","9","10","11","12"];
+     
       
 
 
@@ -188,7 +200,8 @@ class UploadPageState extends State<UploadPage>{
         datepublished:DateTime.now(),
         profileURL:'$Profile_URL',
         type:widget.type,
-        likes:0,);
+        likes:0,
+        dislikes:0,);
 
         PostModel post_doc =PostModel(
         username:'$name',
@@ -198,7 +211,8 @@ class UploadPageState extends State<UploadPage>{
         datepublished:DateTime.now(),
         profileURL:'$Profile_URL',
         type:widget.type,
-        likes:0,);
+        likes:0,
+        dislikes:0,);
 
       
 
@@ -252,10 +266,11 @@ class UploadPageState extends State<UploadPage>{
 });*/
       
       }
-
-      TextEditingController controller=new TextEditingController();
+      TextEditingController controller=TextEditingController();
+      
 
         return Scaffold(
+          resizeToAvoidBottomInset: true,
           appBar: AppBar(
        leading:
             IconButton(onPressed: () {
@@ -284,6 +299,7 @@ class UploadPageState extends State<UploadPage>{
                       children:[
                           SizedBox(height: 20,),
 
+                          if(pickedfile==null)
                           Center(child:isLoading?
                           CircularProgressIndicator() :TextButton(
                             style:ButtonStyle(
@@ -311,58 +327,222 @@ class UploadPageState extends State<UploadPage>{
                                   
                                 ),),
                           ),
-                          ),
+                          )
+                          ,
                           if(pickedfile!=null)Column(
                             children:[
                               SizedBox(height: 10,),
-                              //SizedBox(height: 300,width: 300,),
+                              SizedBox(
+                              child: Image.file(File(pickedfile!.path!),fit: BoxFit.cover,),),
                               SizedBox(height: 10,),
                               SizedBox(height: 50,child:Text('$filename')),
                               SizedBox(height: 10,),
-                              /*Container(
-                                height: 60,
-                                width: 200,
-                                child:TextField(
-                                  controller: controller,
-                                  
-                                decoration: InputDecoration(
-                                  //hintText: 'Select subject',
-                                  suffixIcon: 
-                                  GestureDetector(
-                                    onTap: (){
-                                        setState(() {
-                                          if(displaysubjects==false){
-                                          displaysubjects=true;
-                                          }
-                                          else{
-                                            displaysubjects=false;
-                                          }
-                                        });
-                                    },
-                                    child:Icon(Icons.arrow_drop_down)),
-                                ),
-                              ),
-                              ),
-                              displaysubjects?Container(
-                                height: 200,
-                                width: 230,
-                                child: ListView.builder(
-                                  itemCount: subjects.length,
-                                  itemBuilder:((context, index){
 
-                                  return GestureDetector( 
+                                SizedBox(height: 10,),
+                              Container(
+                      
+                      height: 50,
+                      decoration: ShapeDecoration(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(1),
+                        ),
+                      ),
+                              child: TextField(
+                                textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color.fromARGB(
+                              255, 24, 24, 24), // Set the input text color here
+                        ),
+                        cursorColor: Colors.black,
+                        controller: controller,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                              color: Color.fromARGB(255, 109, 109, 109)),
+                          hintText: 'Enter postname and description here......',
+                        ),
+                              ),),
+                              SizedBox(height: 10,),
+                               Container(
+                              height: 40,
+                              width: 200,
+                              //color: Colors.black,
+                              decoration: ShapeDecoration(
+                        color: Colors.grey,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(17),
+                        ),
+                      ),
+
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                
+    //controller: controller,
+    //decoration: InputDecoration(
+                              children: [
+                              Text('$hintext_class',),
+                            
+                              GestureDetector(
+                                
+                                onTap: () {
+                                  setState(() {
+                                    displayclass = !displayclass;
+                                  });
+                                },
+                                child: Icon(Icons.arrow_drop_down,),
+                                
+                              ),
+                              ]
+                            //),
+                          ),
+                          ),
+                          displaychapters
+                              ? Container(
+                                  height: 200,
+                                  width: 230,
+                                  child: ListView.builder(
+                                    itemCount: classes.length,
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            //controller.text = subjects[index];
+                                            hintext_chap=classes[index];
+                                            displayclass= false;
+                                            //print(controller.text);
+                                          });
+                                        },
+                                        child: ListTile(
+
+                                          title: Text(classes[index]),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ): SizedBox(),
+                              SizedBox(height: 10,),
+                              Container(
+                                  height: 40,
+                                  width: 200,
+                              //color: Colors.black,
+                              decoration: ShapeDecoration(
+                               color: Colors.grey,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(17),
+                        ),
+                      ),
+
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                
+                          //controller: controller,
+                          //decoration: InputDecoration(
+                          children: [
+                          Text('$hintext_sub',),
+                        
+                          GestureDetector(
+                            
+                            onTap: () {
+                              setState(() {
+                                displaysubjects = !displaysubjects;
+                              });
+                            },
+                            child: Icon(Icons.arrow_drop_down,),
+                            
+                          ),
+                          ]
+                        //),
+                      ),
+                      ),
+                      displaysubjects
+                          ? Container(
+                              height: 200,
+                              width: 230,
+                              child: ListView.builder(
+                                itemCount: subjects.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
                                     onTap: () {
                                       setState(() {
-                                        controller.text=(index+1).toString();
+                                        //controller.text = subjects[index];
+                                        hintext_sub=subjects[index];
+                                        displaysubjects = false;
+                                        //print(controller.text);
                                       });
                                     },
-                                  child:ListTile(
-                                    title: Text(subjects[index]),
-                                  )
+                                    child: ListTile(
+
+                                      title: Text(subjects[index]),
+                                    ),
                                   );
-                                }
-                                )),
-                              ):SizedBox(height: 10,),*/
+                                },
+                              ),
+                            ): SizedBox(),
+
+                            SizedBox(height: 10,),
+                            Container(
+                              height: 40,
+                              width: 200,
+                              //color: Colors.black,
+                              decoration: ShapeDecoration(
+                        color: Colors.grey,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(17),
+                        ),
+                      ),
+
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                
+    //controller: controller,
+    //decoration: InputDecoration(
+                              children: [
+                              Text('$hintext_chap',),
+                            
+                              GestureDetector(
+                                
+                                onTap: () {
+                                  setState(() {
+                                    displaychapters = !displaychapters;
+                                  });
+                                },
+                                child: Icon(Icons.arrow_drop_down,),
+                                
+                              ),
+                              ]
+                            //),
+                          ),
+                          ),
+                          displaychapters
+                              ? Container(
+                                  height: 200,
+                                  width: 230,
+                                  child: ListView.builder(
+                                    itemCount: chapter.length,
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            //controller.text = subjects[index];
+                                            hintext_chap=chapter[index];
+                                            displaychapters= false;
+                                            //print(controller.text);
+                                          });
+                                        },
+                                        child: ListTile(
+
+                                          title: Text(chapter[index]),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ): SizedBox(),
+                                SizedBox(height: 10,),
+    
+
+
                               SizedBox(
                               child:isLoading_2?CircularProgressIndicator():TextButton(
                                 style:ButtonStyle(

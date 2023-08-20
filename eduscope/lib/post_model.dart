@@ -7,6 +7,7 @@ class PostModel{
   final String profileURL;
   final String type;
   final likes;
+  final dislikes;
 
   const PostModel({
     required this.type,
@@ -17,6 +18,7 @@ class PostModel{
     required this.datepublished,
     required this.profileURL,
     required this.likes,
+    required this.dislikes,
   });
   Map<String , dynamic>toJson()=>{
   "Username": username,
@@ -26,6 +28,7 @@ class PostModel{
   "Date Published":datepublished,
   "Post URL":posturl,
   "Likes":likes,
+  "Dislikes":dislikes,
 
 };
 
