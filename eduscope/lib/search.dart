@@ -6,9 +6,9 @@ import 'document_search_page.dart';
 import 'test_search_page.dart';
 
 class SearchPage extends StatefulWidget {
-
+  final uid;
+  SearchPage({required this.uid});
   
-  SearchPage({super.key});
   
   @override
   SearchPage_state createState() => SearchPage_state();
@@ -16,7 +16,7 @@ class SearchPage extends StatefulWidget {
 
 class SearchPage_state extends State<SearchPage> {
   var searchName = "";
-
+  
   int _currentIndex = 0;
   void _onItemTapped(int index) {
     setState(() {
@@ -24,17 +24,19 @@ class SearchPage_state extends State<SearchPage> {
     });
   }
 
-  final List<Widget> _search_pages = [
-    AccountSearchPage(searchName:""),
+  
+
+  @override
+  Widget build(BuildContext context) {
+    String uid=widget.uid;
+    final List<Widget> _search_pages = [
+    AccountSearchPage(searchName:"",uid: uid,),
     MediaSearchPage(),
     DocumentSearchPage(),
     TestSearchPage(),
   ];
   
-
-  @override
-  Widget build(BuildContext context) {
-    _search_pages[0] = AccountSearchPage(searchName: searchName);
+    _search_pages[0] = AccountSearchPage(searchName: searchName,uid: widget.uid,);
     return Scaffold(
       appBar: AppBar(
         //backgroundColor: Colors.black,

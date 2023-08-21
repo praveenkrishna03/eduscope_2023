@@ -3,22 +3,129 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class ProfileViewPage extends StatefulWidget {
-  final uid,imgurl;
-  ProfileViewPage({required this.uid,required this.imgurl});
+  final user_uid,imgurl;
+  ProfileViewPage({required this.user_uid,required this.imgurl,});
   
   @override
   ProfileViewPage_state createState() => ProfileViewPage_state();
 }
 
 class ProfileViewPage_state extends State<ProfileViewPage> {
-  FirebaseAuth _auth=FirebaseAuth.instance;
-  final FirebaseStorage _storage=FirebaseStorage.instance;
+  final FirebaseAuth _auth=FirebaseAuth.instance;
+  //final FirebaseStorage _storage=FirebaseStorage.instance;
+  final FirebaseFirestore _firestore=FirebaseFirestore.instance;
+  bool isfollowing=false;
+
+
+
+
+
+  Future<void> followUser(String uid, String user_uid) async {
+  try {
+    // Retrieve the current user's document from Firestore
+    var querySnapshot = await _firestore
+        .collection("user")
+        .where("User Id", isEqualTo: uid)
+        .get();
+
+    var querySnapshot_user = await _firestore
+        .collection("user")
+        .where("User Id", isEqualTo: user_uid)
+        .get();
+
+    
+
+    if (querySnapshot.docs.isNotEmpty) {
+      print('Document exists on the database');
+      var documentSnapshot = querySnapshot.docs[0];
+      var documentSnapshot_user=querySnapshot_user.docs[0];
+      List<dynamic> followingList = documentSnapshot['Following'];
+      
+      
+      if (followingList.contains(user_uid)) {
+        // If the target user is already followed, unfollow them
+        _firestore.collection("user").doc(documentSnapshot.id).update({
+          'Following': FieldValue.arrayRemove([user_uid])
+        });
+
+        // Also remove the current user from the target user's followers list
+        _firestore.collection("user").doc(documentSnapshot_user.id).update({
+          'Followers': FieldValue.arrayRemove([uid])
+        });
+      } else {
+        // If the target user is not followed, follow them
+        _firestore.collection("user").doc(documentSnapshot.id).update({
+          'Following': FieldValue.arrayUnion([user_uid])
+        });
+
+        // Also add the current user to the target user's followers list
+        _firestore.collection("user").doc(documentSnapshot_user.id).update({
+          'Followers': FieldValue.arrayUnion([uid])
+        });
+        if(documentSnapshot['Following'].contains(user_uid)){
+        setState(() {
+          isfollowing=true;
+        });
+
+      }
+      }
+    } else {
+      print('Document not found');
+    }
+  } catch (error) {
+    print('Error: $error');
+  }
+}
+
+
+  /*Future <void> followUser(
+      String uid,
+      String user_uid,
+    )async{
+      try{
+
+        //final doc = FirebaseFirestore.instance.collection('posts').where('User Id', isEqualTo:uid);
+        DocumentSnapshot snap=await _firestore.collection('user').doc(uid).get();
+        List user_following=(snap.data()! as dynamic)['Following'];
+        if(user_following.contains(user_uid)){
+          await _firestore.collection('user').doc(uid).update({
+            'Following':FieldValue.arrayRemove([user_uid])
+          });
+
+          await _firestore.collection('user').doc(user_uid).update({
+            'Follwers':FieldValue.arrayRemove([uid])
+          });
+        }
+        else{
+          await _firestore.collection('user').doc(uid).update({
+            'Following':FieldValue.arrayUnion([user_uid])
+          });
+
+          await _firestore.collection('user').doc(user_uid).update({
+            'Followers':FieldValue.arrayUnion([uid])
+          });
+          
+        }
+
+      }
+      catch(e){
+          print(e);
+
+      }
+      
+    }*/
+
+  
   
   @override
   Widget build(BuildContext context) {
+   
+User? user=_auth.currentUser;
+String uid = user?.uid ?? '';
+String user_uid = widget.user_uid ?? '';
+    
   
   return Scaffold(
     appBar: AppBar(
@@ -42,7 +149,7 @@ class ProfileViewPage_state extends State<ProfileViewPage> {
         ),
       ),
     body:StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('user').where('User Id',isEqualTo:widget.uid).snapshots(),
+        stream: FirebaseFirestore.instance.collection('user').where('User Id',isEqualTo: user_uid).snapshots(),
         
           builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -53,11 +160,24 @@ class ProfileViewPage_state extends State<ProfileViewPage> {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
              var document = snapshot.data!.docs.isNotEmpty ? snapshot.data!.docs[0] : null;
-        String name = document?['Name'] as String? ?? 'No Name';
-        String email = document?['Email'] as String? ?? 'No Email';
-        String Profile_URL =document?['Image URL'] as String? ??'No Image';
+             if(document==null){
+              return Center(child: Text('No user data available.'));
 
-        var postSnap= FirebaseFirestore.instance.collection('user').where('User Id',isEqualTo:widget.uid).get;
+             }
+        String name = document['Name'] ?? 'No Name';
+        String email = document['Email'] ?? 'No Email';
+        String Profile_URL =document['Image URL'] ??'No Image';
+        var followers = (document['Followers'] as List).length ;
+        var following = (document['Following'] as List).length ;
+        if(document['Following'].contains(user_uid)){
+        setState(() {
+          isfollowing=true;
+        });
+
+      }
+        //bool isfollowing = (document['Following'] as List?)?.contains(uid) ?? false;
+        
+
         
         return Scaffold(
   body:SingleChildScrollView(
@@ -123,9 +243,9 @@ class ProfileViewPage_state extends State<ProfileViewPage> {
                       SizedBox(width: 15,),
                       Text('0'),
                       SizedBox(width: 60,),
-                      Text('0'),
+                      Text('$followers'),
                       SizedBox(width: 60,),
-                      Text('0'),
+                      Text('$following'),
                     ],
                   ),
                 ),
@@ -136,14 +256,40 @@ class ProfileViewPage_state extends State<ProfileViewPage> {
             
             
             
-            Center(child:ElevatedButton(onPressed: (){
-          
+            isfollowing?Center(child:ElevatedButton(
+  onPressed: () {
+    if (uid != null && user_uid != null) {
+      followUser(uid, user_uid);
+    } else {
+      // Handle the case where widget.uid or widget.user_uid is null
+    }
+  },
+  child: Container(
+    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 50),
+    child: Text('Unfollow'),
+  ),
+)
+):
+            Center(child:ElevatedButton(
+              
+  onPressed: () {
+    
+    if (uid != null && user_uid != null) {
+      followUser(uid, user_uid);
+            print(uid);
+    print(user_uid);
+    } else {
 
-            },
-            child:Container(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 50),
-            child:Text('Follow')),)),
-
+      // Handle the case where widget.uid or widget.user_uid is null
+    }
+  },
+  child: Container(
+    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 50),
+    child: Text('Follow'),
+  ),
+)
+)
+                        
                 ],
               ),
             ), 

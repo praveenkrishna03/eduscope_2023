@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AccountSearchPage extends StatefulWidget {
- final searchName;
- AccountSearchPage({required this.searchName});
+ final searchName,uid;
+ AccountSearchPage({required this.searchName,required this.uid});
 
   @override
   AccountSearchPage_state createState() => AccountSearchPage_state();
@@ -15,6 +15,7 @@ class AccountSearchPage_state extends State<AccountSearchPage> {
     
     @override
     Widget build(BuildContext context) {
+      String uid=widget.uid;
       
     return Scaffold(
       body:StreamBuilder<QuerySnapshot>(
@@ -29,7 +30,7 @@ class AccountSearchPage_state extends State<AccountSearchPage> {
                 
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) =>  ProfileViewPage(uid:data['User Id'],imgurl:data['Image URL'])),
+                  MaterialPageRoute(builder: (context) =>  ProfileViewPage(user_uid:data['User Id'],imgurl:data['Image URL'],)),
               );
               },
               leading: CircleAvatar(radius: 24,backgroundImage: NetworkImage(data['Image URL'!]),)

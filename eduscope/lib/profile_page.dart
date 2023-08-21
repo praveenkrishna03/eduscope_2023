@@ -37,7 +37,7 @@ class ProfilePage_state extends State<ProfilePage> {
      _imgurl=imgurl;
     });
     print(_imgurl);
-     final cuser = FirebaseFirestore.instance.collection('user').where('User Id', isEqualTo:widget.uid);
+     final cuser = FirebaseFirestore.instance.collection('user').where('User Id', isEqualTo:uid);
 
 cuser.get().then((querySnapshot) {
   if (querySnapshot.size > 0) {
@@ -104,6 +104,10 @@ cuser.get().then((querySnapshot) {
         String name = document?['Name'] as String? ?? 'No Name';
         String email = document?['Email'] as String? ?? 'No Email';
         String Profile_URL =document?['Image URL'] as String? ??'No Image';
+        int followers = (document?['Followers'] as List).length ;
+        int following = (document?['Following'] as List).length ;
+
+
         return Scaffold(
   body:SingleChildScrollView(
   child:Column(
@@ -194,9 +198,9 @@ cuser.get().then((querySnapshot) {
                       SizedBox(width: 15,),
                       Text('0'),
                       SizedBox(width: 60,),
-                      Text('0'),
+                      Text('$followers'),
                       SizedBox(width: 60,),
-                      Text('0'),
+                      Text('$following'),
                     ],
                   ),
                 )

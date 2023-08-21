@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
 
     final List<Widget> _pages = [
     FeedPage(uid:uid),
-    SearchPage(),
+    SearchPage(uid:uid),
     SurfPage(),
     CommunityPage(),
     ProfilePage(uid:uid),

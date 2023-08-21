@@ -3,21 +3,23 @@ import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eduscope_2023/profile_view.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 class FeedPostCard extends StatelessWidget{
+  FirebaseAuth _auth=FirebaseAuth.instance;
   final snap;
 
-  Future like_update()async{
-    final cuser = FirebaseFirestore.instance.collection('posts').where('User Id', isEqualTo:snap['User Id']);
+  Future likeUpdate()async{
+    final like = FirebaseFirestore.instance.collection('posts').where('User Id', isEqualTo:snap['User Id']);
 
-cuser.get().then((querySnapshot) {
+like.get().then((querySnapshot) {
   if (querySnapshot.size > 0) {
     final documentSnapshot = querySnapshot.docs[0];
     final documentReference = documentSnapshot.reference;
 
     documentReference.update({
-      'Likes': snap['Likes']+1, // Replace with the actual URL you want to add
+      'Likes': (snap['Likes']+1), // Replace with the actual URL you want to add
     });
   }
 
@@ -25,16 +27,16 @@ cuser.get().then((querySnapshot) {
 );
   }
 
-  Future dislike_update()async{
-    final cuser = FirebaseFirestore.instance.collection('posts').where('User Id', isEqualTo:snap['User Id']);
+  Future dislikeUpdate()async{
+    final dislike = FirebaseFirestore.instance.collection('posts').where('User Id', isEqualTo:snap['User Id']);
 
-cuser.get().then((querySnapshot) {
+dislike.get().then((querySnapshot) {
   if (querySnapshot.size > 0) {
     final documentSnapshot = querySnapshot.docs[0];
     final documentReference = documentSnapshot.reference;
 
     documentReference.update({
-      'Dislikes': snap['Dislikes']+1, // Replace with the actual URL you want to add
+      'Dislikes': (snap['Dislikes']+1), // Replace with the actual URL you want to add
     });
   }
 
@@ -42,10 +44,12 @@ cuser.get().then((querySnapshot) {
 );
   }
   
-  const FeedPostCard({Key?key,required this. snap}):super(key: key);
+  FeedPostCard({Key?key,required this. snap}):super(key: key);
   @override
 
   Widget build(BuildContext context){
+    User? user=_auth.currentUser;
+       String uid=user?.uid??'';
 
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -53,11 +57,12 @@ cuser.get().then((querySnapshot) {
           children: [
             GestureDetector(
               onTap:(() {
-                
+                print(snap['User Id']);
+                print(uid);
               Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProfileViewPage(uid: snap['User Id'],imgurl: snap['Profile URL'],),
+                              builder: (context) => ProfileViewPage(user_uid: snap['User Id'],imgurl: snap['Profile URL'],),
                             ),
               );
               }
@@ -94,10 +99,10 @@ cuser.get().then((querySnapshot) {
             Row(
               children: [
                 IconButton(onPressed: (){
-                  like_update();
+                  likeUpdate();
                 }, icon: Icon(Icons.thumb_up)),
                 IconButton(onPressed: (){
-                  dislike_update();
+                
                 }, icon: Icon(Icons.thumb_down)),
                 IconButton(onPressed: (){}, icon: Icon(Icons.share)),
                 IconButton(onPressed: (){}, icon: Icon(Icons.drive_file_move)),
