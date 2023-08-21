@@ -16,7 +16,7 @@ class ProfileViewPage_state extends State<ProfileViewPage> {
   final FirebaseAuth _auth=FirebaseAuth.instance;
   //final FirebaseStorage _storage=FirebaseStorage.instance;
   final FirebaseFirestore _firestore=FirebaseFirestore.instance;
-  bool isfollowing=false;
+  //bool isfollowing=false;
 
 
 
@@ -64,16 +64,13 @@ class ProfileViewPage_state extends State<ProfileViewPage> {
         _firestore.collection("user").doc(documentSnapshot_user.id).update({
           'Followers': FieldValue.arrayUnion([uid])
         });
-        if(documentSnapshot['Following'].contains(user_uid)){
-        setState(() {
-          isfollowing=true;
-        });
-
-      }
+        
       }
     } else {
       print('Document not found');
     }
+   
+
   } catch (error) {
     print('Error: $error');
   }
@@ -169,12 +166,13 @@ String user_uid = widget.user_uid ?? '';
         String Profile_URL =document['Image URL'] ??'No Image';
         var followers = (document['Followers'] as List).length ;
         var following = (document['Following'] as List).length ;
-        if(document['Following'].contains(user_uid)){
-        setState(() {
-          isfollowing=true;
-        });
+        bool isfollowing=document['Followers'].contains(uid);
+        
+          
+        
+        
 
-      }
+      
         //bool isfollowing = (document['Following'] as List?)?.contains(uid) ?? false;
         
 
