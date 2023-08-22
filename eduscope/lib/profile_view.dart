@@ -167,6 +167,7 @@ String user_uid = widget.user_uid ?? '';
         var followers = (document['Followers'] as List).length ;
         var following = (document['Following'] as List).length ;
         bool isfollowing=document['Followers'].contains(uid);
+        var post=document['Posts'] ??0;
         
           
         
@@ -239,7 +240,7 @@ String user_uid = widget.user_uid ?? '';
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(width: 15,),
-                      Text('0'),
+                      Text('$post'),
                       SizedBox(width: 60,),
                       Text('$followers'),
                       SizedBox(width: 60,),

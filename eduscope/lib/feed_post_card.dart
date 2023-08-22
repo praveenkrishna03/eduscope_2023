@@ -100,10 +100,11 @@ dislike.get().then((querySnapshot) {
               children: [
                 IconButton(onPressed: (){
                   likeUpdate();
+                  
                 }, icon: Icon(Icons.thumb_up)),
-                IconButton(onPressed: (){
+                //IconButton(onPressed: (){
                 
-                }, icon: Icon(Icons.thumb_down)),
+                //}, icon: Icon(Icons.thumb_down)),
                 IconButton(onPressed: (){}, icon: Icon(Icons.share)),
                 IconButton(onPressed: (){}, icon: Icon(Icons.drive_file_move)),
                 IconButton(onPressed: (){}, icon: Icon(Icons.comment))
@@ -113,9 +114,9 @@ dislike.get().then((querySnapshot) {
               
               children: [
                 SizedBox(width: 20,),
-                Text(snap['Likes'].toString()),
+                Text(snap['Likes'].length.toString()),
                 SizedBox(width: 40,),
-                Text(snap['Dislikes'].toString()),
+                
               ],
             ),
 
@@ -145,5 +146,8 @@ dislike.get().then((querySnapshot) {
           ],
         ),
     );
+  
   }
+
+  
 }

@@ -34,6 +34,7 @@ class UploadPageState extends State<UploadPage>{
   bool displaychapters=false;
   bool displayclass=false;
   
+  
         
 
   final FirebaseStorage _storage=FirebaseStorage.instance;
@@ -398,7 +399,7 @@ class UploadPageState extends State<UploadPage>{
                             //),
                           ),
                           ),
-                          displaychapters
+                          displayclass
                               ? Container(
                                   height: 200,
                                   width: 230,

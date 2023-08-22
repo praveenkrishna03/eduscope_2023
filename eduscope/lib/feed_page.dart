@@ -18,12 +18,16 @@ class FeedPage extends StatefulWidget {
 }
 
 class FeedPage_state extends State<FeedPage> {
-
+ 
   
   
   
   @override
   Widget build(BuildContext context) {
+    String uid=widget.uid;
+    
+    
+
     return Scaffold(
       appBar: AppBar(
        leading:
@@ -135,7 +139,9 @@ class FeedPage_state extends State<FeedPage> {
           ),
         ),
       ),
+      
       body:StreamBuilder(
+
         stream: FirebaseFirestore.instance.collection('posts').snapshots(),
         builder: (Context, AsyncSnapshot<QuerySnapshot<Map<String,dynamic>>>snapshot){
           if(snapshot.connectionState==ConnectionState.waiting){

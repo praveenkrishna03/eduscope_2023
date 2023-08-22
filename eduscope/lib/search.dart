@@ -32,7 +32,7 @@ class SearchPage_state extends State<SearchPage> {
     final List<Widget> _search_pages = [
     AccountSearchPage(searchName:"",uid: uid,),
     MediaSearchPage(),
-    DocumentSearchPage(),
+    DocumentSearchPage(searchName:"",uid: uid,),
     TestSearchPage(),
   ];
   

@@ -1,3 +1,4 @@
+import 'package:eduscope_2023/reels_display.dart';
 import 'package:flutter/material.dart';
 
 
@@ -10,11 +11,25 @@ class SurfPage_state extends State<SurfPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: Text(
-        'Surf Page',
-        style: TextStyle(color: Colors.white),
-      )),
+      body: PageView(
+        scrollDirection: Axis.vertical,
+        children: [
+           
+        Container(
+          color: Colors.amberAccent,
+        ),
+        Container(
+          color: Colors.red,
+        ),
+        Container(
+          color: Colors.blue,
+        ),
+        Container(
+          color: Colors.green,
+        ),reelsDisplay()
+      ],
+        
+      )
     );
   }
 }

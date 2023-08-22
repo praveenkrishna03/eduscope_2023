@@ -20,7 +20,7 @@ class ProfilePage extends StatefulWidget {
   ProfilePage_state createState() => ProfilePage_state();
 }
 
-class ProfilePage_state extends State<ProfilePage> {
+class ProfilePage_state extends State<ProfilePage> with SingleTickerProviderStateMixin{
   
   final FirebaseStorage _storage=FirebaseStorage.instance;
   
@@ -113,7 +113,7 @@ cuser.get().then((querySnapshot) {
   child:Column(
     children: [
       Container(
-        height: 200,
+        height: 160,
         width: double.infinity,
         color: Color.fromRGBO(41, 41, 41, 0.85),
         child: Stack(
@@ -203,12 +203,16 @@ cuser.get().then((querySnapshot) {
                       Text('$following'),
                     ],
                   ),
-                )
+                ),
+                
 
                 
               ],
 
-            ))
+            )
+            ),
+            
+            
            
         
             
@@ -216,37 +220,40 @@ cuser.get().then((querySnapshot) {
               
             
             
-           /* Positioned(
-              top: 100,
-              left: 120,
-              child: Text('0',
-              style:TextStyle(
-                fontSize: 16
-              )),
-            ),
-            Positioned(
-              top: 100,
-              left: 180,
-              child: Text('0',
-              style:TextStyle(
-                fontSize: 16
-              )),
-            ),
-            Positioned(
-              top: 100,
-              left: 265,
-              child: Text('0',
-              style:TextStyle(
-                fontSize: 16
-              )),
-            ),*/
-            
             
               
           
             
           ],
         ),
+      ),
+      SizedBox(
+        child:DefaultTabController(
+      initialIndex: 1,
+      length: 4,
+      
+      child: 
+        TabBar(
+
+            tabs: <Widget>[
+              Tab(
+                
+                icon: Icon(Icons.collections),
+              ),
+              Tab(
+                icon: Icon(Icons.video_library),
+              ),
+              Tab(
+                icon: Icon(Icons.file_copy),
+              ),
+              Tab(
+                icon: Icon(Icons.save),
+              ),
+
+            ],
+          ),
+        
+      )
       ),
     /*SizedBox(
       child:Row(
