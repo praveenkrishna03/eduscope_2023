@@ -20,14 +20,14 @@ class MessagingService {
   Future<void> createGroup(String userName, String id, String groupName) async {
     DocumentReference groupDocumentReference = await groupCollection.add({
       "groupName": groupName,      "groupIcon": "",
-      "admin": "${id}_$userName",
+      "admin": "$userName",
       "members": [],
       "groupId": "",
       "recentMessage": "",
       "recentMessageSender": "",
     });
     await groupDocumentReference.update({
-      "members": FieldValue.arrayUnion(["${uid}_$userName"]),
+      "members": FieldValue.arrayUnion(["$userName"]),
       "groupId": groupDocumentReference.id,
     });
 
@@ -35,7 +35,7 @@ class MessagingService {
     if (userDocumentSnapshot != null) {
       DocumentReference userDocumentReference = userCollection.doc(userDocumentSnapshot.id);
       await userDocumentReference.update({
-        "groups": FieldValue.arrayUnion(["${groupDocumentReference.id}_$groupName"])
+        "groups": FieldValue.arrayUnion(["${groupDocumentReference.id}"])
       });
     }
   }
@@ -78,18 +78,18 @@ class MessagingService {
     //if group has user then remove them or rejoin them
     if(groups.contains("${groupId}_$groupName")){
       await userDocumentReference.update({
-        "groups":FieldValue.arrayRemove(["${groupId}_$groupName"])
+        "groups":FieldValue.arrayRemove(["${groupId}"])
       });
       await groupDocumentReference.update({
-        "members":FieldValue.arrayRemove(["${uid}_$userName"])
+        "members":FieldValue.arrayRemove(["$userName"])
       });
     }
     else{
       await userDocumentReference.update({
-        "groups":FieldValue.arrayUnion(["${groupId}_$groupName"])
+        "groups":FieldValue.arrayUnion(["${groupId}"])
       });
       await groupDocumentReference.update({
-        "members":FieldValue.arrayUnion(["${uid}_$userName"])
+        "members":FieldValue.arrayUnion(["$userName"])
       });
     }
   }

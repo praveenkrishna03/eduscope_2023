@@ -1,9 +1,11 @@
 //import 'package:chatbot/pages/group_info.dart';
+import 'group_info.dart';
 import 'messeging _services.dart';
-//import 'package:chatbot/widgets/message_tile.dart';
+import 'messege_tile.dart';
 import 'widget_tree.dart';
  import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'widgets.dart';
 
 class ChatPage extends StatefulWidget {
   final String groupId;
@@ -53,7 +55,7 @@ class _ChatPageState extends State<ChatPage> {
         backgroundColor: Theme.of(context).primaryColor,
         actions: [
           IconButton(onPressed: (){
-            //nextScreen(context, GroupInfo(groupId: widget.groupId, groupName: widget.groupName, adminName: admin,));
+            nextScreen(context, GroupInfo(groupId: widget.groupId, groupName: widget.groupName, adminName: admin,));
           }, icon: const Icon(Icons.info_outline))
         ],
       ),
@@ -119,11 +121,11 @@ class _ChatPageState extends State<ChatPage> {
           physics: const BouncingScrollPhysics(),
           itemCount: snapshot.data.docs.length,
           itemBuilder: (context, index) {
-           /* return MessageTile(
+            return MessageTile(
               message: snapshot.data.docs[index]['message'],
               sender: snapshot.data.docs[index]['sender'],
               sentByMe: widget.userName == snapshot.data.docs[index]['sender'],
-            );*/
+            );
           },
         )
             : Container();

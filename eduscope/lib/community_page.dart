@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eduscope_2023/messeging%20_services.dart';
+import 'package:eduscope_2023/search_community.dart';
 import 'package:eduscope_2023/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'group_tile.dart';
+import 'auth.dart';
+import 'account_search_page.dart';
 import 'auth.dart';
 
 
@@ -20,7 +23,7 @@ class CommunityPage_state extends State<CommunityPage> {
    String userName = "";
   String email ="";
   Auth authService = Auth();
-
+  
  
 
     @override
@@ -31,9 +34,12 @@ void initState() {
   groups = FirebaseFirestore.instance.collection('groups').snapshots();
 }
 
+   
+
   @override
   Widget build(BuildContext context) {
     
+  
     return DefaultTabController(
       initialIndex: 0,
       length: 2,
@@ -67,6 +73,10 @@ void initState() {
                      Flexible(
                     child: groupList(),
                   ),
+                  
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
                     FloatingActionButton(
                       onPressed: (){
                         popUpDialog(context);
@@ -75,6 +85,17 @@ void initState() {
                       backgroundColor: Theme.of(context).primaryColor,
                       child: const Icon(Icons.add, color: Colors.white, size: 30,),
                     ),
+                    SizedBox(width: 50,),
+                    FloatingActionButton(
+                      onPressed: (){
+                        SearchPage();
+                      },
+                      elevation: 0,
+                      backgroundColor: Theme.of(context).primaryColor,
+                      child: const Icon(Icons.search, color: Colors.white, size: 30,),
+                    ),
+                  ],)
+                    
                 ],
                 )
               
@@ -105,8 +126,22 @@ String getName(String res){
      print(underscoreIndex);
      return res.substring(underscoreIndex + 1);
      
+   
    // Return an appropriate default value if underscore is not found
 }
+
+ getuserName(String uid)async{
+
+     var querySnapshot =  await FirebaseFirestore.instance
+    .collection("user")
+    .where("User Id", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+    .get();
+    
+    var documentSnapshot = querySnapshot.docs[0];
+      String userName = documentSnapshot['Name'];
+
+        return userName;
+    }
 
 
 
@@ -188,11 +223,12 @@ userName = documentSnapshot['Name'];
       );
     });
   }
-
-
+ String uid=FirebaseAuth.instance.currentUser!.uid;
+  
 
    groupList() {
   return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+    
     stream: FirebaseFirestore.instance.collection('groups').snapshots(),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -216,10 +252,20 @@ userName = documentSnapshot['Name'];
       
       String groupName = doc['groupName'];
       String groupId = doc['groupId'];
+      var querySnapshot =  FirebaseFirestore.instance
+    .collection("user")
+    .where("User Id", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+    .get();
+
+
       
       print("Group Name: $groupName");
       print("Group ID: $groupId");
-      String userName = getName(doc['admin']);
+
+      //var documentSnapshot = querySnapshot.docs[0];
+      //String userName = documentSnapshot['Name'];
+
+       //userName = getuserName(uid);
       return GroupTile(
         groupName: groupName,
         groupId: groupId,
@@ -245,7 +291,7 @@ userName = documentSnapshot['Name'];
         children: [
           GestureDetector(
             onTap: (){
-              //popUpDialog(context);
+              popUpDialog(context);
             },
               child: Icon(Icons.add_circle, color: Colors.grey[700], size: 75,)),
           const SizedBox(height: 20,),
