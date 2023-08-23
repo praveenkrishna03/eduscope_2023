@@ -3,11 +3,19 @@ import 'login.dart';
 import 'package:flutter/material.dart';
 import 'widget_tree.dart';
 import 'user_model.dart';
+import 'constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+      apiKey: Constants.apiKey,
+      appId: Constants.appId,
+      messagingSenderId: Constants.messagingSenderId,
+      projectId: Constants.projectId,
+    )
+  );
   runApp(
       
        Eduscope(),

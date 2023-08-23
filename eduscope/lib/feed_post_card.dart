@@ -102,6 +102,16 @@ dislike.get().then((querySnapshot) {
               child: Image.network(snap['Post URL'],fit: BoxFit.cover,),
               
             ) ,
+            Container(
+              decoration: ShapeDecoration(
+                        color: Color.fromARGB(255, 121, 120, 120),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(17),bottomRight: Radius.circular(17)),
+                        ),
+                      ),
+
+            child:Column(
+              children:[
             Row(
               children: [
                 IconButton(onPressed: (){
@@ -119,11 +129,15 @@ dislike.get().then((querySnapshot) {
             Row(
               
               children: [
+                
                 SizedBox(width: 20,),
                 Text('${snap['Likes'].length}'),
                 SizedBox(width: 40,),
                 
               ],
+            ),
+              ]
+            )
             ),
 
             Container(
