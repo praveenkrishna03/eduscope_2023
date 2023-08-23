@@ -140,7 +140,8 @@ class FeedPage_state extends State<FeedPage> {
         ),
       ),
       
-      body:StreamBuilder(
+      body:SingleChildScrollView(
+      child:StreamBuilder(
 
         stream: FirebaseFirestore.instance.collection('posts').snapshots(),
         builder: (Context, AsyncSnapshot<QuerySnapshot<Map<String,dynamic>>>snapshot){
@@ -151,13 +152,17 @@ class FeedPage_state extends State<FeedPage> {
           }
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
-            itemBuilder: (context, index) => 
-
-             FeedPostCard(snap: snapshot.data!.docs[index].data(),),
-          );
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context, index) =>
+ //             print(snapshot.data!.docs.length),
+             FeedPostCard(snap: snapshot.data!.docs[index].data()),
+          
+        );
           
         },
         )
+      )
     );
       
     

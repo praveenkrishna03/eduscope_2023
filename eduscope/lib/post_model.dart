@@ -6,7 +6,7 @@ class PostModel{
   final datepublished;
   final String profileURL;
   final String type;
-  final likes;
+  final List likes;
   final dislikes;
 
   const PostModel({

@@ -201,7 +201,7 @@ class UploadPageState extends State<UploadPage>{
         datepublished:DateTime.now(),
         profileURL:'$Profile_URL',
         type:widget.type,
-        likes:0,
+        likes:[],
         dislikes:0,);
 
         PostModel post_doc =PostModel(
@@ -212,7 +212,7 @@ class UploadPageState extends State<UploadPage>{
         datepublished:DateTime.now(),
         profileURL:'$Profile_URL',
         type:widget.type,
-        likes:0,
+        likes:[],
         dislikes:0,);
 
       
@@ -410,7 +410,7 @@ class UploadPageState extends State<UploadPage>{
                                         onTap: () {
                                           setState(() {
                                             //controller.text = subjects[index];
-                                            hintext_chap=classes[index];
+                                            hintext_class=classes[index];
                                             displayclass= false;
                                             //print(controller.text);
                                           });

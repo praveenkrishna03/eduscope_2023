@@ -1,6 +1,4 @@
-import 'dart:ffi';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eduscope_2023/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,7 +8,7 @@ class FeedPostCard extends StatelessWidget{
   FirebaseAuth _auth=FirebaseAuth.instance;
   final snap;
 
-  Future likeUpdate()async{
+  /*Future likeUpdate()async{
     final like = FirebaseFirestore.instance.collection('posts').where('User Id', isEqualTo:snap['User Id']);
 
 like.get().then((querySnapshot) {
@@ -42,7 +40,7 @@ dislike.get().then((querySnapshot) {
 
 }
 );
-  }
+  }*/
   
   FeedPostCard({Key?key,required this. snap}):super(key: key);
   @override
@@ -50,6 +48,7 @@ dislike.get().then((querySnapshot) {
   Widget build(BuildContext context){
     User? user=_auth.currentUser;
        String uid=user?.uid??'';
+
 
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -68,6 +67,13 @@ dislike.get().then((querySnapshot) {
               }
               ),           
             child:Container(
+              //color: const Color.fromARGB(255, 126, 126, 126),
+              decoration: ShapeDecoration(
+                        color: Color.fromARGB(255, 121, 120, 120),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(17),topRight: Radius.circular(17)),
+                        ),
+                      ),
               
               padding: const EdgeInsets.symmetric(
                 vertical: 4,horizontal: 16,
@@ -99,7 +105,7 @@ dislike.get().then((querySnapshot) {
             Row(
               children: [
                 IconButton(onPressed: (){
-                  likeUpdate();
+                 // likeUpdate();
                   
                 }, icon: Icon(Icons.thumb_up)),
                 //IconButton(onPressed: (){
@@ -114,7 +120,7 @@ dislike.get().then((querySnapshot) {
               
               children: [
                 SizedBox(width: 20,),
-                Text(snap['Likes'].length.toString()),
+                Text('${snap['Likes'].length}'),
                 SizedBox(width: 40,),
                 
               ],
