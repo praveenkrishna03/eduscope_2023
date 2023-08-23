@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eduscope_2023/messeging%20_services.dart';
+import 'package:eduscope_2023/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'group_tile.dart';
+import 'auth.dart';
 
 
 class CommunityPage extends StatefulWidget {
@@ -8,12 +13,29 @@ class CommunityPage extends StatefulWidget {
 }
 
 class CommunityPage_state extends State<CommunityPage> {
-  Stream? groups;
+  Stream<QuerySnapshot<Map<String, dynamic>>>? groups = FirebaseFirestore.instance.collection('groups').snapshots();
+
+   bool _isLoading = false;
+  String groupName = "";
+   String userName = "";
+  String email ="";
+  Auth authService = Auth();
+
+ 
+
+    @override
+void initState() {
+  super.initState();
+  // Initialize the groups stream here
+  
+  groups = FirebaseFirestore.instance.collection('groups').snapshots();
+}
 
   @override
   Widget build(BuildContext context) {
+    
     return DefaultTabController(
-      initialIndex: 1,
+      initialIndex: 0,
       length: 2,
       child: Scaffold(
         appBar: AppBar(
@@ -33,62 +55,186 @@ class CommunityPage_state extends State<CommunityPage> {
             ],
           ),
         ),
-        body: const TabBarView(
+        body: TabBarView(
+          
           children: <Widget>[
             Center(
               child: Text("Common Groups"),
             ),
             Center(
-              child: Text('Personal Groups'),
+              child:Column(
+                children: [
+                     Flexible(
+                    child: groupList(),
+                  ),
+                    FloatingActionButton(
+                      onPressed: (){
+                        popUpDialog(context);
+                      },
+                      elevation: 0,
+                      backgroundColor: Theme.of(context).primaryColor,
+                      child: const Icon(Icons.add, color: Colors.white, size: 30,),
+                    ),
+                ],
+                )
+              
+            
+              
             ),
             
           ],
+          
         ),
+        
       ),
     );
     
 
   }
-    String getName(String res){
-    return res.substring(res.indexOf("_")+1);
-  }
+   /*String getId(String res){
+  int underscoreIndex = res.indexOf('_');
+  print(underscoreIndex);
   
-  String getId(String res){
-    return res.substring(0,res.indexOf("_"));
-  }
-    groupList(){
-    return StreamBuilder(stream: groups,
-    builder: (context, AsyncSnapshot snapshot){
-      // make some check
-      if(snapshot.hasData){
-        if(snapshot.data['groups'] != null){
-          if(snapshot.data['groups'].length != 0){
-            return ListView.builder(
-              itemCount: snapshot.data['groups'].length,
-              itemBuilder: (context,index){
-                int reveseIndex = snapshot.data['groups'].length - index - 1;
-                return GroupTile(
-                    groupName: getName(snapshot.data['groups'][reveseIndex]), groupId: getId(snapshot.data['groups'][reveseIndex]), userName: snapshot.data['fullName']);
-              },
-            );
-          }else{
-            return noGroupWidget();
-          }
-        }
-        else{
-          return noGroupWidget();
-        }
-      }
-      else{
-        return Center(
-          child: CircularProgressIndicator(
-            color: Theme.of(context).primaryColor,
+    return res.substring(0, underscoreIndex);
+  
+  
+}*/
 
+String getName(String res){
+  int underscoreIndex = res.indexOf('_');
+     print(underscoreIndex);
+     return res.substring(underscoreIndex + 1);
+     
+   // Return an appropriate default value if underscore is not found
+}
+
+
+
+  popUpDialog(BuildContext context){
+    showDialog(barrierDismissible: false, context: context, builder: (context){
+      return StatefulBuilder(
+        builder: ((context, setState){
+        return AlertDialog(
+          title: const Text("Create a group",textAlign: TextAlign.left,),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _isLoading == true ? Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor,),)
+                  : TextField(
+                onChanged: (val){
+                  setState(() {
+                    groupName = val;
+
+                  });
+                },
+                style: const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.red),
+                    borderRadius: BorderRadius.circular(15),
+                  )
+                ),
+              ),
+            ],
           ),
-        );}
-    },
-    );
+          actions: [
+            ElevatedButton(onPressed: (){
+              Navigator.of(context).pop();
+            },
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).primaryColor,
+            ),
+              child: const Text("CANCEL"),
+            ),
+            ElevatedButton(onPressed: () async {
+              if(groupName != ""){
+                setState(() {
+                  _isLoading = true;
+                });
+                 var querySnapshot = await FirebaseFirestore.instance
+    .collection("user")
+    .where("User Id", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+    .get();
+
+var documentSnapshot = querySnapshot.docs[0];
+userName = documentSnapshot['Name'];
+
+                MessagingService(uid: FirebaseAuth.instance.currentUser!.uid).createGroup(userName, FirebaseAuth.instance.currentUser!.uid, groupName).whenComplete(() {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  Navigator.of(context).pop();
+                  showSnakbar(context, Colors.green, "Group created successfully.😍");
+                });
+              }
+            },
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).primaryColor,
+              ),
+              child: const Text("CREATE"),
+            )
+
+          ],
+        );
+        })
+      );
+    });
   }
+
+
+
+   groupList() {
+  return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+    stream: FirebaseFirestore.instance.collection('groups').snapshots(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return Center(child: CircularProgressIndicator());
+      } else if (snapshot.hasError) {
+        return Center(child: Text('Error: ${snapshot.error}'));
+      } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+        return noGroupWidget();
+      } else {
+        print("Number of documents: ${snapshot.data!.docs.length}");
+
+        print("Data available: ${snapshot.data!.docs.length} documents");
+        return Container(
+  height: MediaQuery.of(context).size.height * 0.6,
+  child: ListView.builder(
+    physics: NeverScrollableScrollPhysics(),
+    shrinkWrap: true,
+    itemCount: snapshot.data!.docs.length,
+    itemBuilder: (context, listIndex) {
+      DocumentSnapshot<Map<String, dynamic>> doc = snapshot.data!.docs[listIndex];
+      
+      String groupName = doc['groupName'];
+      String groupId = doc['groupId'];
+      
+      print("Group Name: $groupName");
+      print("Group ID: $groupId");
+      String userName = getName(doc['admin']);
+      return GroupTile(
+        groupName: groupName,
+        groupId: groupId,
+        userName: userName,
+      );
+    },
+  ),
+);
+
+      }
+    },
+  );
+}
+
+
 
   noGroupWidget(){
     return Container(

@@ -1,35 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class MessegingService {
+class MessagingService {
   final String? uid;
-  MessegingService({this.uid});
-  // reference for our collecitons
+  MessagingService({this.uid});
+
   final CollectionReference userCollection = FirebaseFirestore.instance.collection("user");
   final CollectionReference groupCollection = FirebaseFirestore.instance.collection("groups");
-  // saving the userdata
-  /*Future savingUserdata(String fullname, String email ) async{
-    return await userCollection.doc(uid).set({
-      "fullName": fullname,
-      "email": email,
-      "groups": [],
-      "profilePic": "",
-      "uid": uid,
-    });
-  }*/
-  // getting user data
-  Future gettingUserData (String email) async {
-    QuerySnapshot snapshot = await userCollection.where("Email", isEqualTo: email).get();
-    return snapshot;
+
+  Future<QuerySnapshot> getUserSnapshot() async {
+    return await userCollection.where("User Id", isEqualTo: uid).get();
   }
-  // get user groups
-  getUserGroups() async {
-    return userCollection.where('User Id',isEqualTo: uid).snapshots();
-  }
-  // creating a group
-  Future createGroup(String userName, String id, String groupName) async {
+
+  Future<QueryDocumentSnapshot<Object?>?> getUserDocumentSnapshot() async {
+  final querySnapshot = await getUserSnapshot();
+  return querySnapshot.docs.isNotEmpty ? querySnapshot.docs.first : null;
+}
+
+
+  Future<void> createGroup(String userName, String id, String groupName) async {
     DocumentReference groupDocumentReference = await groupCollection.add({
-      "groupName": groupName,
-      "groupIcon": "",
+      "groupName": groupName,      "groupIcon": "",
       "admin": "${id}_$userName",
       "members": [],
       "groupId": "",
@@ -37,14 +27,17 @@ class MessegingService {
       "recentMessageSender": "",
     });
     await groupDocumentReference.update({
-      "members":FieldValue.arrayUnion(["${uid}_$userName"]),
+      "members": FieldValue.arrayUnion(["${uid}_$userName"]),
       "groupId": groupDocumentReference.id,
     });
-    DocumentReference userDocumentRefence = userCollection.doc(uid);
-    // removed await here check once
-    return await userDocumentRefence.update({
-      "groups":FieldValue.arrayUnion(["${groupDocumentReference.id}_$groupName"])
-    });
+
+    final userDocumentSnapshot = await getUserDocumentSnapshot();
+    if (userDocumentSnapshot != null) {
+      DocumentReference userDocumentReference = userCollection.doc(userDocumentSnapshot.id);
+      await userDocumentReference.update({
+        "groups": FieldValue.arrayUnion(["${groupDocumentReference.id}_$groupName"])
+      });
+    }
   }
   //getting the chats
   getChats(String groupId){
