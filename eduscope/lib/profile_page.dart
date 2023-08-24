@@ -229,7 +229,7 @@ cuser.get().then((querySnapshot) {
       ),
       SizedBox(
         child:DefaultTabController(
-      initialIndex: 1,
+      initialIndex: 0,
       length: 4,
       
       child: 

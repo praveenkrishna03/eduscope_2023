@@ -17,6 +17,27 @@ class MessagingService {
 }
 
 
+Future<void> addMemberToGroupAndUser(String groupId, String userName, String groupName) async {
+  try {
+    // Update the group's members
+    await groupCollection.doc(groupId).update({
+      "members": FieldValue.arrayUnion([userName]),
+    });
+
+    // Update the user's groups array
+    final userDocumentSnapshot = await getUserDocumentSnapshot();
+    if (userDocumentSnapshot != null) {
+      DocumentReference userDocumentReference = userCollection.doc(userDocumentSnapshot.id);
+      await userDocumentReference.update({
+        "groups": FieldValue.arrayUnion(["${groupId}_$groupName"]),
+      });
+    }
+  } catch (e) {
+    print("Error adding member to group and user: $e");
+  }
+}
+
+
   Future<void> createGroup(String userName, String id, String groupName) async {
     DocumentReference groupDocumentReference = await groupCollection.add({
       "groupName": groupName,      "groupIcon": "",

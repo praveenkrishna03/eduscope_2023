@@ -1,5 +1,6 @@
 //import 'package:chatbot/pages/home_page.dart';
 //import 'package:chatbot/services/auth_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'auth.dart';
 import 'messeging _services.dart';
 import 'widgets.dart';
@@ -20,12 +21,38 @@ class GroupInfo extends StatefulWidget {
 class _GroupInfoState extends State<GroupInfo> {
   Auth authService = Auth();
   Stream? members;
+  String userName='';
+  bool _isLoading=false;
+
+  Future<void> initUserData() async {
+    String fetchedUserName = await getuserName(uid);
+    setState(() {
+      userName = fetchedUserName;
+    });
+  }
+  String uid=FirebaseAuth.instance.currentUser!.uid;
+  
+  getuserName(String uid)async{
+
+     var querySnapshot =  await FirebaseFirestore.instance
+    .collection("user")
+    .where("User Id", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+    .get();
+    
+    var documentSnapshot = querySnapshot.docs[0];
+      String userName = documentSnapshot['Name'];
+
+        return userName;
+    }
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getMembers();
+    initUserData();
+    
   }
 
   getMembers() async {
@@ -45,6 +72,7 @@ class _GroupInfoState extends State<GroupInfo> {
 
   @override
   Widget build(BuildContext context) {
+    String groupName=widget.groupName;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -99,7 +127,7 @@ class _GroupInfoState extends State<GroupInfo> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Group: ${widget.groupName}",style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500),),
+                      Text("Group: $groupName",style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500),),
                       const SizedBox(height: 5,),
                       Text("Admin: ${getName(widget.adminName)}",style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500),),
                     ],
@@ -113,7 +141,8 @@ class _GroupInfoState extends State<GroupInfo> {
                 Text('Add an  existing User',style: TextStyle(fontSize: 15),),
                 FloatingActionButton(
                       onPressed: (){
-                        //();
+                        popUpDialog(context);
+                        
                       },
                       elevation: 0,
                       backgroundColor: Theme.of(context).primaryColor,
@@ -128,6 +157,92 @@ class _GroupInfoState extends State<GroupInfo> {
         ),
       ),
     );
+  }
+
+   popUpDialog(BuildContext context){
+    showDialog(barrierDismissible: false, context: context, builder: (context){
+      return StatefulBuilder(
+        builder: ((context, setState){
+        return AlertDialog(
+          title: const Text("Add Group Member",textAlign: TextAlign.left,),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              /*_isLoading == true ? Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor,),)
+                  : TextField(
+                onChanged: (val){
+                  setState(() {
+                    groupName = val;
+
+                  });
+                },
+                style: const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.red),
+                    borderRadius: BorderRadius.circular(15),
+                  )
+                ),
+              ),*/
+            ],
+          ),
+          actions: [
+            ElevatedButton(onPressed: (){
+              Navigator.of(context).pop();
+            },
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).primaryColor,
+            ),
+              child: const Text("CANCEL"),
+            ),
+            ElevatedButton(onPressed: () async {
+
+              MessagingService(uid: FirebaseAuth.instance.currentUser!.uid).addMemberToGroupAndUser(userName, FirebaseAuth.instance.currentUser!.uid, widget.groupName).whenComplete(() {
+                  setState(() {
+                    _isLoading = false;
+                  });
+              });
+     
+              /*if(groupName != ""){
+                setState(() {
+                  _isLoading = true;
+                });
+                 var querySnapshot = await FirebaseFirestore.instance
+    .collection("user")
+    .where("User Id", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+    .get();
+
+var documentSnapshot = querySnapshot.docs[0];
+userName = documentSnapshot['Name'];
+
+                MessagingService(uid: FirebaseAuth.instance.currentUser!.uid).createGroup(userName, FirebaseAuth.instance.currentUser!.uid, groupName).whenComplete(() {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  Navigator.of(context).pop();
+                  showSnakbar(context, Colors.green, "Group created successfully.😍");
+                });
+              }*/
+            },
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).primaryColor,
+              ),
+              child: const Text("Add"),
+            )
+
+          ],
+        );
+        })
+      );
+    });
   }
   memberList(){
     return StreamBuilder(

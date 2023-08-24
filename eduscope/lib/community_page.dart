@@ -24,6 +24,12 @@ class CommunityPage_state extends State<CommunityPage> {
   String email ="";
   Auth authService = Auth();
   
+  Future<void> initUserData() async {
+    String fetchedUserName = await getuserName(uid);
+    setState(() {
+      userName = fetchedUserName;
+    });
+  }
  
 
     @override
@@ -32,6 +38,7 @@ void initState() {
   // Initialize the groups stream here
   
   groups = FirebaseFirestore.instance.collection('groups').snapshots();
+  initUserData();
 }
 
    
@@ -71,7 +78,8 @@ void initState() {
               child:Column(
                 children: [
                      Flexible(
-                    child: groupList(),
+                      
+                    child: groupList(userName),
                   ),
                   
                   Row(
@@ -130,7 +138,7 @@ String getName(String res){
    // Return an appropriate default value if underscore is not found
 }
 
- getuserName(String uid)async{
+  getuserName(String uid)async{
 
      var querySnapshot =  await FirebaseFirestore.instance
     .collection("user")
@@ -226,10 +234,10 @@ userName = documentSnapshot['Name'];
  String uid=FirebaseAuth.instance.currentUser!.uid;
   
 
-   groupList() {
+   groupList(String userName) {
   return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
     
-    stream: FirebaseFirestore.instance.collection('groups').snapshots(),
+    stream: FirebaseFirestore.instance.collection('groups').where('members',arrayContains: userName).snapshots(),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
         return Center(child: CircularProgressIndicator());
@@ -265,7 +273,8 @@ userName = documentSnapshot['Name'];
       //var documentSnapshot = querySnapshot.docs[0];
       //String userName = documentSnapshot['Name'];
 
-       //userName = getuserName(uid);
+
+       print('User Name:$userName');
       return GroupTile(
         groupName: groupName,
         groupId: groupId,
