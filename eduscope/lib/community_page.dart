@@ -93,15 +93,7 @@ void initState() {
                       backgroundColor: Theme.of(context).primaryColor,
                       child: const Icon(Icons.add, color: Colors.white, size: 30,),
                     ),
-                    SizedBox(width: 50,),
-                    FloatingActionButton(
-                      onPressed: (){
-                        SearchPage();
-                      },
-                      elevation: 0,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      child: const Icon(Icons.search, color: Colors.white, size: 30,),
-                    ),
+                    
                   ],)
                     
                 ],

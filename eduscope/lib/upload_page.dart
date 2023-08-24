@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eduscope_2023/firebase_api.dart';
 import 'package:eduscope_2023/profile_page.dart';
+import 'package:eduscope_2023/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
@@ -27,7 +28,7 @@ class UploadPage extends StatefulWidget{
 }
 
 class UploadPageState extends State<UploadPage>{
-            var hintext_sub='Select subject';
+            var hintext_sub='Select Subject';
         var hintext_chap='Select Chapter';
         var hintext_class='Select Class';
         bool displaysubjects=false;
@@ -156,6 +157,9 @@ class UploadPageState extends State<UploadPage>{
   List<String> subjects=["Tamil","English","Maths","Science","Social Science"];
   List<String> chapter=["1","2","3","4","5","6","7","8","9","10","11","12"];
   List<String> classes=["6","7","8","9","10","11","12"];
+
+  TextEditingController controller=TextEditingController();
+      
      
       
 
@@ -179,6 +183,7 @@ class UploadPageState extends State<UploadPage>{
         String name = document?['Name'] as String? ?? 'No Name';
         String email = document?['Email'] as String? ?? 'No Email';
         String Profile_URL =document?['Image URL'] as String? ??'No Image';
+        String type=widget.type;
 
 
         UploadTask? uploadFile(String destination,File fileToDisplay) {
@@ -195,25 +200,35 @@ class UploadPageState extends State<UploadPage>{
       String postURL = await snapshot.ref.getDownloadURL();
       PostModel post =PostModel(
         username:'$name',
-        postname:filename,
+        postname:controller.text,
         posturl:postURL,
         uid:widget.uid,
         datepublished:DateTime.now(),
         profileURL:'$Profile_URL',
-        type:widget.type,
+        type:type,
         likes:[],
-        dislikes:0,);
+        isreported: false,
+        classtag: hintext_class,
+        chaptag: hintext_chap,
+        subtag: hintext_sub,
+        documentURL: ''
+        );
 
         PostModel post_doc =PostModel(
         username:'$name',
-        postname:filename,
+        postname:controller.text,
         posturl:'https://firebasestorage.googleapis.com/v0/b/eduscope-7f35b.appspot.com/o/document.jpg?alt=media&token=bfb68b93-6629-417b-83e0-1e66ee5da997',
         uid:widget.uid,
         datepublished:DateTime.now(),
         profileURL:'$Profile_URL',
         type:widget.type,
         likes:[],
-        dislikes:0,);
+        isreported:false,
+        subtag: hintext_sub,
+        chaptag: hintext_chap,
+        classtag: hintext_class,
+        documentURL: postURL
+        );
 
       
 
@@ -267,7 +282,6 @@ class UploadPageState extends State<UploadPage>{
 });*/
       
       }
-      TextEditingController controller=TextEditingController();
       
 
         return Scaffold(
@@ -340,31 +354,7 @@ class UploadPageState extends State<UploadPage>{
                               SizedBox(height: 10,),
 
                                 SizedBox(height: 10,),
-                              Container(
-                      
-                      height: 50,
-                      decoration: ShapeDecoration(
-                        color: Color.fromARGB(255, 255, 255, 255),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(1),
-                        ),
-                      ),
-                              child: TextField(
-                                textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Color.fromARGB(
-                              255, 24, 24, 24), // Set the input text color here
-                        ),
-                        cursorColor: Colors.black,
-                        controller: controller,
-                        keyboardType: TextInputType.name,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                              color: Color.fromARGB(255, 109, 109, 109)),
-                          hintText: 'Enter postname and description here......',
-                        ),
-                              ),),
+                              
                               SizedBox(height: 10,),
                                Container(
                               height: 40,
@@ -541,6 +531,32 @@ class UploadPageState extends State<UploadPage>{
                                   ),
                                 ): SizedBox(),
                                 SizedBox(height: 10,),
+                                Container(
+                      
+                      height: 50,
+                      decoration: ShapeDecoration(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(1),
+                        ),
+                      ),
+                              child: TextField(
+                                textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color.fromARGB(
+                              255, 24, 24, 24), // Set the input text color here
+                        ),
+                        cursorColor: Colors.black,
+                        controller: controller,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                              color: Color.fromARGB(255, 109, 109, 109)),
+                          hintText: 'Enter postname and description here......',
+                        ),
+                              ),),
+                              SizedBox(height: 10,),
     
 
 
@@ -551,9 +567,12 @@ class UploadPageState extends State<UploadPage>{
                           
                             ),
                                 onPressed: () {
-                                  
-                                  uploadFile(destination, fileToDisplay!);
-                                  
+                                  if(hintext_sub=='Select Subject'||hintext_chap=='Select Chapter'||hintext_class=='Select Class'||controller.text==null){
+                                    showSnakbar(context, Colors.white, 'Please fill the respective coloumns');
+                                  }else{
+                                    uploadFile(destination, fileToDisplay!);
+                                  }
+
                                   
                                   
                                   

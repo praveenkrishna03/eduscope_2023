@@ -7,7 +7,13 @@ class PostModel{
   final String profileURL;
   final String type;
   final List likes;
-  final dislikes;
+  final bool isreported;
+  final String subtag;
+  final String classtag;
+  final String chaptag;
+  final String documentURL;
+  
+
 
   const PostModel({
     required this.type,
@@ -18,7 +24,12 @@ class PostModel{
     required this.datepublished,
     required this.profileURL,
     required this.likes,
-    required this.dislikes,
+    required this.isreported,
+    required this.chaptag,
+    required this.classtag,
+    required this.documentURL,
+
+    required this.subtag
   });
   Map<String , dynamic>toJson()=>{
   "Username": username,
@@ -28,7 +39,11 @@ class PostModel{
   "Date Published":datepublished,
   "Post URL":posturl,
   "Likes":likes,
-  "Dislikes":dislikes,
+  "Dislikes":false,
+  "ClassTag":classtag,
+  "ChapTag":chaptag,
+  "SubTag":subtag,
+  "Document URL":documentURL
 
 };
 

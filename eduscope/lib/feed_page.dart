@@ -146,6 +146,7 @@ class FeedPage_state extends State<FeedPage> {
         stream: FirebaseFirestore.instance.collection('posts').snapshots(),
         builder: (Context, AsyncSnapshot<QuerySnapshot<Map<String,dynamic>>>snapshot){
           if(snapshot.connectionState==ConnectionState.waiting){
+            
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -156,7 +157,7 @@ class FeedPage_state extends State<FeedPage> {
             shrinkWrap: true,
             itemBuilder: (context, index) =>
  //             print(snapshot.data!.docs.length),
-             FeedPostCard(snap: snapshot.data!.docs[index].data()),
+             FeedPostCard(snap: snapshot.data!.docs[index],),
           
         );
           

@@ -199,6 +199,7 @@ class SignupPage_state extends State<SignupPage> {
                               255, 24, 24, 24), // Set the input text color here
                         ),
                         cursorColor: Colors.black,
+                        obscureText: true,
                         controller: reg_password_controller,
                         keyboardType: TextInputType.name,
                         decoration: InputDecoration(
@@ -360,7 +361,7 @@ class SignupPage_state extends State<SignupPage> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.blue,
-                            fontSize: 16,
+                            fontSize: 15,
                             fontFamily: 'Inria Sans',
                             fontWeight: FontWeight.w400,
                           ),

@@ -35,6 +35,7 @@ class Eduscope extends StatelessWidget {
     return MaterialApp(
         theme: ThemeData.dark(),
         home: const WidgetTree(),
+        debugShowCheckedModeBanner: false,
         /*home: Scaffold(
           body: ListView(children: [
             StartingAnimation(),

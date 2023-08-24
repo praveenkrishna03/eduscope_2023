@@ -6,6 +6,7 @@ import 'messeging _services.dart';
 import 'widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'add_user.dart';
 
 class GroupInfo extends StatefulWidget {
   final String groupId;
@@ -136,21 +137,30 @@ class _GroupInfoState extends State<GroupInfo> {
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text('Add an  existing User',style: TextStyle(fontSize: 15),),
-                FloatingActionButton(
-                      onPressed: (){
-                        popUpDialog(context);
-                        
-                      },
-                      elevation: 0,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      child: const Icon(Icons.person_add, color: Colors.white, size: 20,),
-                    ),
-                    
-              ],
-            ),
+  mainAxisAlignment: MainAxisAlignment.spaceAround,
+  children: [
+    Text('Add an existing User', style: TextStyle(fontSize: 15)),
+    FloatingActionButton(
+      onPressed: () async {
+        // Get the snapshot and groupDocumentReference before calling the popUpDialog
+        var snapshot = await FirebaseFirestore.instance.collection('user').get();
+        var groupDocumentReference = await FirebaseFirestore.instance.collection('groups').where('groupId',isEqualTo: widget.groupId).get();
+        var ref=groupDocumentReference.docs[0];
+        // Call the popUpDialog function
+        Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UserListPage(groupId: ref['groupId'], groupName: ref['groupName']),
+        ),
+      );
+      },
+      elevation: 0,
+      backgroundColor: Theme.of(context).primaryColor,
+      child: const Icon(Icons.person_add, color: Colors.white, size: 20),
+    ),
+  ],
+),
+
             
             memberList(),
           ],
@@ -159,91 +169,62 @@ class _GroupInfoState extends State<GroupInfo> {
     );
   }
 
-   popUpDialog(BuildContext context){
-    showDialog(barrierDismissible: false, context: context, builder: (context){
+  popUpDialog(BuildContext context, QuerySnapshot<Map<String, dynamic>> snapshot, DocumentReference groupDocumentReference,groupName) {
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (context) {
       return StatefulBuilder(
-        builder: ((context, setState){
-        return AlertDialog(
-          title: const Text("Add Group Member",textAlign: TextAlign.left,),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              /*_isLoading == true ? Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor,),)
-                  : TextField(
-                onChanged: (val){
-                  setState(() {
-                    groupName = val;
+        builder: ((context, setState) {
+          return AlertDialog(
+            title: const Text("Add Member", textAlign: TextAlign.left),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // ... your existing content, such as the TextField ...
 
-                  });
-                },
-                style: const TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Theme.of(context).primaryColor),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Theme.of(context).primaryColor),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.red),
-                    borderRadius: BorderRadius.circular(15),
-                  )
+                // Display a list of users
+                Expanded(
+                child:ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshot.docs.length,
+                  itemBuilder: (context, listIndex) {
+                    DocumentSnapshot<Map<String, dynamic>> doc = snapshot.docs[listIndex];
+                    String userName = doc['Name'];
+
+                    return ListTile(
+                      title: Text(userName),
+                      onTap: () async {
+                        // Call the function to add the selected user to the group
+                        await MessagingService().addMemberToGroupAndUser(groupDocumentReference.id, userName, groupName);
+                        Navigator.of(context).pop(); // Close the dialog after adding user
+                        showSnakbar(context, Colors.green, "User added to the group.😊");
+                      },
+                    );
+                  },
                 ),
-              ),*/
-            ],
-          ),
-          actions: [
-            ElevatedButton(onPressed: (){
-              Navigator.of(context).pop();
-            },
-            style: ElevatedButton.styleFrom(
-              primary: Theme.of(context).primaryColor,
+                )
+              ],
             ),
-              child: const Text("CANCEL"),
-            ),
-            ElevatedButton(onPressed: () async {
-
-              MessagingService(uid: FirebaseAuth.instance.currentUser!.uid).addMemberToGroupAndUser(userName, FirebaseAuth.instance.currentUser!.uid, widget.groupName).whenComplete(() {
-                  setState(() {
-                    _isLoading = false;
-                  });
-              });
-     
-              /*if(groupName != ""){
-                setState(() {
-                  _isLoading = true;
-                });
-                 var querySnapshot = await FirebaseFirestore.instance
-    .collection("user")
-    .where("User Id", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-    .get();
-
-var documentSnapshot = querySnapshot.docs[0];
-userName = documentSnapshot['Name'];
-
-                MessagingService(uid: FirebaseAuth.instance.currentUser!.uid).createGroup(userName, FirebaseAuth.instance.currentUser!.uid, groupName).whenComplete(() {
-                  setState(() {
-                    _isLoading = false;
-                  });
+            actions: [
+              ElevatedButton(
+                onPressed: () {
                   Navigator.of(context).pop();
-                  showSnakbar(context, Colors.green, "Group created successfully.😍");
-                });
-              }*/
-            },
-              style: ElevatedButton.styleFrom(
-                primary: Theme.of(context).primaryColor,
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                ),
+                child: const Text("CANCEL"),
               ),
-              child: const Text("Add"),
-            )
-
-          ],
-        );
-        })
+            ],
+          );
+        }),
       );
-    });
-  }
+    },
+  );
+}
+
+
   memberList(){
     return StreamBuilder(
       stream: members,

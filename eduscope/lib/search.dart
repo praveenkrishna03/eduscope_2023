@@ -31,7 +31,7 @@ class SearchPage_state extends State<SearchPage> {
     String uid=widget.uid;
     final List<Widget> _search_pages = [
     AccountSearchPage(searchName:"",uid: uid,),
-    MediaSearchPage(),
+    MediaSearchPage(searchName:"",uid:uid),
     DocumentSearchPage(searchName:"",uid: uid,),
     TestSearchPage(),
   ];

@@ -78,8 +78,8 @@ class LoginPage_state extends State<LoginPage> {
           children: [Form(
             key: _formkey,
             child: Container(
-              width: 386,
-              height: 838,
+              width: 800,
+              height: 1000,
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(color: Colors.white),
               child: Stack(
@@ -89,8 +89,8 @@ class LoginPage_state extends State<LoginPage> {
                     left: 0,
                     top: 0,
                     child: Container(
-                      width: 386,
-                      height: 838,
+                      width: 1000,
+                      height: 1000,
                       decoration: BoxDecoration(
                         color: Colors.black.withOpacity(0.8500000238418579),
                       ),
@@ -182,9 +182,11 @@ class LoginPage_state extends State<LoginPage> {
                         ),
                         cursorColor: Colors.black,
                         controller: password_controller,
+                        obscureText: true,
                         keyboardType: TextInputType.name,
                         decoration: InputDecoration(
                           border: InputBorder.none,
+                          
                           hintStyle: TextStyle(
                               color: Color.fromARGB(255, 109, 109, 109)),
                           hintText: 'Enter your password',
@@ -287,7 +289,7 @@ class LoginPage_state extends State<LoginPage> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.blue,
-                            fontSize: 16,
+                            fontSize: 17,
                             fontFamily: 'Inria Sans',
                             fontWeight: FontWeight.w400,
                           ),

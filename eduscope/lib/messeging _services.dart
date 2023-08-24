@@ -6,6 +6,7 @@ class MessagingService {
 
   final CollectionReference userCollection = FirebaseFirestore.instance.collection("user");
   final CollectionReference groupCollection = FirebaseFirestore.instance.collection("groups");
+  final CollectionReference comgroupCollection = FirebaseFirestore.instance.collection("commongroups");
 
   Future<QuerySnapshot> getUserSnapshot() async {
     return await userCollection.where("User Id", isEqualTo: uid).get();
@@ -60,6 +61,33 @@ Future<void> addMemberToGroupAndUser(String groupId, String userName, String gro
       });
     }
   }
+
+
+  Future<void> createcomGroup(String userName, String id, String groupName) async {
+    DocumentReference groupDocumentReference = await comgroupCollection.add({
+      "groupName": groupName,      "groupIcon": "",
+      "admin": "$userName",
+      "members": [],
+      "groupId": "",
+      "recentMessage": "",
+      "recentMessageSender": "",
+    });
+    await groupDocumentReference.update({
+      "members": FieldValue.arrayUnion(["$userName"]),
+      "groupId": groupDocumentReference.id,
+    });
+
+    final userDocumentSnapshot = await getUserDocumentSnapshot();
+    if (userDocumentSnapshot != null) {
+      DocumentReference userDocumentReference = userCollection.doc(userDocumentSnapshot.id);
+      await userDocumentReference.update({
+        "groups": FieldValue.arrayUnion(["${groupDocumentReference.id}"])
+      });
+    }
+  }
+
+
+
   //getting the chats
   getChats(String groupId){
     return groupCollection.doc(groupId).collection("messages").orderBy("time").snapshots();

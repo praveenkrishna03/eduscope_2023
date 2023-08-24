@@ -2,47 +2,32 @@
 import 'package:eduscope_2023/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class FeedPostCard extends StatelessWidget{
   FirebaseAuth _auth=FirebaseAuth.instance;
-  final snap;
+  final DocumentSnapshot snap;
 
-  /*Future likeUpdate()async{
-    final like = FirebaseFirestore.instance.collection('posts').where('User Id', isEqualTo:snap['User Id']);
-
-like.get().then((querySnapshot) {
-  if (querySnapshot.size > 0) {
-    final documentSnapshot = querySnapshot.docs[0];
-    final documentReference = documentSnapshot.reference;
-
-    documentReference.update({
-      'Likes': (snap['Likes']+1), // Replace with the actual URL you want to add
-    });
-  }
-
-}
-);
-  }
-
-  Future dislikeUpdate()async{
-    final dislike = FirebaseFirestore.instance.collection('posts').where('User Id', isEqualTo:snap['User Id']);
-
-dislike.get().then((querySnapshot) {
-  if (querySnapshot.size > 0) {
-    final documentSnapshot = querySnapshot.docs[0];
-    final documentReference = documentSnapshot.reference;
-
-    documentReference.update({
-      'Dislikes': (snap['Dislikes']+1), // Replace with the actual URL you want to add
-    });
-  }
-
-}
-);
-  }*/
   
-  FeedPostCard({Key?key,required this. snap}):super(key: key);
+  FeedPostCard({Key?key,required this. snap,}):super(key: key);
+  void likeUpdate(String postId) async {
+    User? user = _auth.currentUser;
+    String uid = user?.uid ?? '';
+
+    CollectionReference postsCollection = FirebaseFirestore.instance.collection('posts');
+    DocumentReference postRef = postsCollection.doc(postId);
+
+    DocumentSnapshot postSnapshot = await postRef.get();
+    List<dynamic> likes = postSnapshot['Likes'] ?? [];
+
+    if (!likes.contains(uid)) {
+      likes.add(uid);
+      await postRef.update({'Likes': likes});
+    }
+  }
+
+ 
   @override
 
   Widget build(BuildContext context){
@@ -116,7 +101,7 @@ dislike.get().then((querySnapshot) {
               children: [
                 IconButton(onPressed: (){
                  // likeUpdate();
-                  
+                  likeUpdate(snap.id);
                 }, icon: Icon(Icons.thumb_up)),
                 //IconButton(onPressed: (){
                 
@@ -148,7 +133,9 @@ dislike.get().then((querySnapshot) {
                   TextSpan(
                 text: snap['Username'],
                 style: TextStyle(fontWeight: FontWeight.bold),
-            ),TextSpan(
+            ),
+            TextSpan(text: '  '),
+            TextSpan(
                 text: snap['Post Name'],
 
             ),
