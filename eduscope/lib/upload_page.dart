@@ -161,7 +161,7 @@ class UploadPageState extends State<UploadPage>{
   TextEditingController controller=TextEditingController();
       
      
-      
+      String type=widget.type;
 
 
       String uid=widget.uid;
@@ -198,6 +198,7 @@ class UploadPageState extends State<UploadPage>{
         final uploadTask=ref.putFile(fileToDisplay);
        uploadTask.then((TaskSnapshot snapshot) async {
       String postURL = await snapshot.ref.getDownloadURL();
+      String postId = FirebaseFirestore.instance.collection('posts').doc().id;
       PostModel post =PostModel(
         username:'$name',
         postname:controller.text,
@@ -211,7 +212,8 @@ class UploadPageState extends State<UploadPage>{
         classtag: hintext_class,
         chaptag: hintext_chap,
         subtag: hintext_sub,
-        documentURL: ''
+        documentURL: '',
+        PostId: postId,
         );
 
         PostModel post_doc =PostModel(
@@ -221,13 +223,14 @@ class UploadPageState extends State<UploadPage>{
         uid:widget.uid,
         datepublished:DateTime.now(),
         profileURL:'$Profile_URL',
-        type:widget.type,
+        type:type,
         likes:[],
         isreported:false,
         subtag: hintext_sub,
         chaptag: hintext_chap,
         classtag: hintext_class,
-        documentURL: postURL
+        documentURL: postURL,
+        PostId: postId,
         );
 
       
@@ -244,6 +247,8 @@ class UploadPageState extends State<UploadPage>{
           CollectionReference userdata= FirebaseFirestore.instance.collection('reels');
       userdata.add(post.toJson());
         }
+
+        
 
 
       setState(() {

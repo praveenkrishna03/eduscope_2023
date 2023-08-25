@@ -72,7 +72,19 @@ void initState() {
           
           children: <Widget>[
             Center(
-              child: Text("Common Groups"),
+              child:Column(
+                children: [
+                     Flexible(
+                      
+                    child: commongroupList(userName),
+                  ),
+                  
+                   
+                ],
+                )
+              
+            
+              
             ),
             Center(
               child:Column(
@@ -225,6 +237,60 @@ userName = documentSnapshot['Name'];
   }
  String uid=FirebaseAuth.instance.currentUser!.uid;
   
+    commongroupList(String userName) {
+  return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+    
+    stream: FirebaseFirestore.instance.collection('commongroups').snapshots(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return Center(child: CircularProgressIndicator());
+      } else if (snapshot.hasError) {
+        return Center(child: Text('Error: ${snapshot.error}'));
+      } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+        return noGroupWidget();
+      } else {
+        print("Number of documents: ${snapshot.data!.docs.length}");
+
+        print("Data available: ${snapshot.data!.docs.length} documents");
+        return Container(
+  height: MediaQuery.of(context).size.height * 0.6,
+  child: ListView.builder(
+    physics: NeverScrollableScrollPhysics(),
+    shrinkWrap: true,
+    itemCount: snapshot.data!.docs.length,
+    itemBuilder: (context, listIndex) {
+      DocumentSnapshot<Map<String, dynamic>> doc = snapshot.data!.docs[listIndex];
+      
+      String groupName = doc['groupName'];
+      String groupId = doc['groupId'];
+      var querySnapshot =  FirebaseFirestore.instance
+    .collection("user")
+    .where("User Id", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+    .get();
+
+
+      
+      print("Group Name: $groupName");
+      print("Group ID: $groupId");
+
+      //var documentSnapshot = querySnapshot.docs[0];
+      //String userName = documentSnapshot['Name'];
+
+
+       print('User Name:$userName');
+      return GroupTile(
+        groupName: groupName,
+        groupId: groupId,
+        userName: userName,
+      );
+    },
+  ),
+);
+
+      }
+    },
+  );
+}
 
    groupList(String userName) {
   return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(

@@ -1,8 +1,13 @@
 
+import 'package:eduscope_2023/pdf_viewer.dart';
 import 'package:eduscope_2023/profile_view.dart';
+import 'package:eduscope_2023/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 
 class FeedPostCard extends StatelessWidget{
@@ -26,6 +31,27 @@ class FeedPostCard extends StatelessWidget{
       await postRef.update({'Likes': likes});
     }
   }
+
+  void movePostToReported(String postId) async {
+  // Get the post details from the 'posts' collection
+  DocumentReference postRef = FirebaseFirestore.instance.collection('posts').doc(postId);
+  DocumentSnapshot postSnapshot = await postRef.get();
+  Map<String, dynamic> postData = postSnapshot.data() as Map<String, dynamic>;
+
+  // Add the post details to the 'reported' collection
+  CollectionReference reportedCollection = FirebaseFirestore.instance.collection('reported');
+  await reportedCollection.add(postData);
+
+  // Delete the post from the 'posts' collection
+  await postRef.delete();
+}
+
+
+
+   
+
+
+
 
  
   @override
@@ -51,7 +77,8 @@ class FeedPostCard extends StatelessWidget{
               );
               }
               ),           
-            child:Container(
+            child:
+            Container(
               //color: const Color.fromARGB(255, 126, 126, 126),
               decoration: ShapeDecoration(
                         color: Color.fromARGB(255, 121, 120, 120),
@@ -83,7 +110,15 @@ class FeedPostCard extends StatelessWidget{
             ),
             ),
             SizedBox(height: 5,),
-            SizedBox(
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFViewerPage(pdfURL: snap['Document URL']),
+                            ),
+                          );
+              }, 
               child: Image.network(snap['Post URL'],fit: BoxFit.cover,),
               
             ) ,
@@ -106,6 +141,11 @@ class FeedPostCard extends StatelessWidget{
                 //IconButton(onPressed: (){
                 
                 //}, icon: Icon(Icons.thumb_down)),
+                IconButton(onPressed: (){
+                
+                    movePostToReported(snap.id);
+  
+                }, icon: Icon(Icons.report)),
                 IconButton(onPressed: (){}, icon: Icon(Icons.share)),
                 IconButton(onPressed: (){}, icon: Icon(Icons.drive_file_move)),
                 IconButton(onPressed: (){}, icon: Icon(Icons.comment))
@@ -146,7 +186,7 @@ class FeedPostCard extends StatelessWidget{
             Container(
               alignment: Alignment.topLeft,
               padding: EdgeInsets.only(top: 4),
-              child: Text('20-08-2023',),
+              child: Text('25-08-2023',),
             )
             
             

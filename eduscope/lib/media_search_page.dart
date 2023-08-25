@@ -16,7 +16,7 @@ class MediaSearchPage_state extends State<MediaSearchPage> {
     Widget build(BuildContext context) {
     return Scaffold(
       body:StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('posts').where('type',isEqualTo: 'image',).orderBy('Post Name').startAt([widget.searchName]).endAt([widget.searchName + "\uf8ff"]) .snapshots(),
+        stream: FirebaseFirestore.instance.collection('posts')/*.where('type',isEqualTo: 'image',)*/.orderBy('Post Name').startAt([widget.searchName]).endAt([widget.searchName + "\uf8ff"]) .snapshots(),
         builder: (context , Snapshot){
           return ListView.builder(
           itemCount:Snapshot.data!.docs.length,

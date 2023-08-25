@@ -12,6 +12,7 @@ class PostModel{
   final String classtag;
   final String chaptag;
   final String documentURL;
+  final String PostId;
   
 
 
@@ -28,6 +29,7 @@ class PostModel{
     required this.chaptag,
     required this.classtag,
     required this.documentURL,
+    required this.PostId,
 
     required this.subtag
   });
@@ -43,7 +45,9 @@ class PostModel{
   "ClassTag":classtag,
   "ChapTag":chaptag,
   "SubTag":subtag,
-  "Document URL":documentURL
+  "Document URL":documentURL,
+  "Post Id":PostId,
+  "type":type,
 
 };
 

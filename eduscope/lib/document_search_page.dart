@@ -17,7 +17,7 @@ class DocumentSearchPage_state extends State<DocumentSearchPage> {
       String uid=widget.uid;
     return Scaffold(
       body:StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('posts').where('type',isEqualTo: 'document').orderBy('Post Name').startAt([widget.searchName]).endAt([widget.searchName + "\uf8ff"]) .snapshots(),
+        stream: FirebaseFirestore.instance.collection('posts')/*.where('type',isEqualTo: 'document',)*/.orderBy('Post Name').startAt([widget.searchName]).endAt([widget.searchName + "\uf8ff"]) .snapshots(),
         builder: (context , Snapshot){
           return ListView.builder(
           itemCount:Snapshot.data!.docs.length,
