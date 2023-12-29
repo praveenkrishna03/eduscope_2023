@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 class FeedPostCard extends StatelessWidget {
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -186,9 +187,11 @@ class FeedPostCard extends StatelessWidget {
           Container(
             alignment: Alignment.topLeft,
             padding: EdgeInsets.only(top: 4),
-            child: Text(
-              '25-08-2023',
-            ),
+            child: RichText(
+                text: TextSpan(
+              text: DateFormat('dd-MM-yyyy , hh:mm a')
+                  .format(snap['Date Published'].toDate()),
+            )),
           )
         ],
       ),

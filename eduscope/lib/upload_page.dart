@@ -130,33 +130,60 @@ class UploadPageState extends State<UploadPage> {
     }
   }
 
+  List<String> subjects = [
+    "Tamil",
+    "English",
+    "Maths",
+    "Science",
+    "Social Science"
+  ];
+
+  String? selectedSubject;
+  String? selectedChapter;
+  String? selectedClass;
+  List<String> chapter = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12"
+  ];
+  List<String> classes = ["6", "7", "8", "9", "10", "11", "12"];
+
+  void showClassMenu(BuildContext context) {
+    final RenderBox button = context.findRenderObject() as RenderBox;
+    final Offset offset = button.localToGlobal(Offset.zero);
+
+    showMenu<String>(
+      context: context,
+      position: RelativeRect.fromLTRB(offset.dx + button.size.width / 2,
+          offset.dy + button.size.height, 0, 0),
+      items: classes.map((String _class) {
+        return PopupMenuItem<String>(
+          value: _class,
+          child: Text(_class),
+        );
+      }).toList(),
+    ).then((String? value) {
+      if (value != null) {
+        setState(() {
+          selectedClass = value;
+        });
+      }
+    });
+  }
+
+  TextEditingController controller = TextEditingController();
+
   @override
-  Widget build(BuildContext snapshot) {
-    List<String> subjects = [
-      "Tamil",
-      "English",
-      "Maths",
-      "Science",
-      "Social Science"
-    ];
-    List<String> chapter = [
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "10",
-      "11",
-      "12"
-    ];
-    List<String> classes = ["6", "7", "8", "9", "10", "11", "12"];
-
-    TextEditingController controller = TextEditingController();
-
+  Widget build(BuildContext context) {
     String type = widget.type;
 
     String uid = widget.uid;
@@ -367,47 +394,22 @@ class UploadPageState extends State<UploadPage> {
                               //controller: controller,
                               //decoration: InputDecoration(
                               children: [
-                                Text(
-                                  '$hintext_class',
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      displayclass = !displayclass;
-                                    });
-                                  },
-                                  child: Icon(
-                                    Icons.arrow_drop_down,
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      // Open dropdown menu
+                                      showClassMenu(context);
+                                    },
+                                    child: Text(
+                                      selectedClass ?? 'Select Class',
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                 ),
                               ]
                               //),
                               ),
                         ),
-                        displayclass
-                            ? Container(
-                                height: 200,
-                                width: 230,
-                                child: ListView.builder(
-                                  itemCount: classes.length,
-                                  itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          //controller.text = subjects[index];
-                                          hintext_class = classes[index];
-                                          displayclass = false;
-                                          //print(controller.text);
-                                        });
-                                      },
-                                      child: ListTile(
-                                        title: Text(classes[index]),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              )
-                            : SizedBox(),
                         SizedBox(
                           height: 10,
                         ),
@@ -428,47 +430,33 @@ class UploadPageState extends State<UploadPage> {
                               //controller: controller,
                               //decoration: InputDecoration(
                               children: [
-                                Text(
-                                  '$hintext_sub',
+                                Expanded(
+                                  child: Text(
+                                    selectedSubject ?? 'Select Subject',
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
+                                PopupMenuButton<String>(
+                                  icon: Icon(Icons
+                                      .arrow_drop_down), // Icon for dropdown
+                                  onSelected: (String value) {
                                     setState(() {
-                                      displaysubjects = !displaysubjects;
+                                      selectedSubject = value;
                                     });
                                   },
-                                  child: Icon(
-                                    Icons.arrow_drop_down,
-                                  ),
+                                  itemBuilder: (BuildContext context) {
+                                    return subjects.map((String subject) {
+                                      return PopupMenuItem<String>(
+                                        value: subject,
+                                        child: Text(subject),
+                                      );
+                                    }).toList();
+                                  },
                                 ),
                               ]
                               //),
                               ),
                         ),
-                        displaysubjects
-                            ? Container(
-                                height: 200,
-                                width: 230,
-                                child: ListView.builder(
-                                  itemCount: subjects.length,
-                                  itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          //controller.text = subjects[index];
-                                          hintext_sub = subjects[index];
-                                          displaysubjects = false;
-                                          //print(controller.text);
-                                        });
-                                      },
-                                      child: ListTile(
-                                        title: Text(subjects[index]),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              )
-                            : SizedBox(),
                         SizedBox(
                           height: 10,
                         ),
@@ -489,47 +477,33 @@ class UploadPageState extends State<UploadPage> {
                               //controller: controller,
                               //decoration: InputDecoration(
                               children: [
-                                Text(
-                                  '$hintext_chap',
+                                Expanded(
+                                  child: Text(
+                                    selectedChapter ?? 'Select Chapter',
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
+                                PopupMenuButton<String>(
+                                  icon: Icon(Icons
+                                      .arrow_drop_down), // Icon for dropdown
+                                  onSelected: (String value) {
                                     setState(() {
-                                      displaychapters = !displaychapters;
+                                      selectedChapter = value;
                                     });
                                   },
-                                  child: Icon(
-                                    Icons.arrow_drop_down,
-                                  ),
+                                  itemBuilder: (BuildContext context) {
+                                    return chapter.map((String chapter) {
+                                      return PopupMenuItem<String>(
+                                        value: chapter,
+                                        child: Text(chapter),
+                                      );
+                                    }).toList();
+                                  },
                                 ),
                               ]
                               //),
                               ),
                         ),
-                        displaychapters
-                            ? Container(
-                                height: 200,
-                                width: 230,
-                                child: ListView.builder(
-                                  itemCount: chapter.length,
-                                  itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          //controller.text = subjects[index];
-                                          hintext_chap = chapter[index];
-                                          displaychapters = false;
-                                          //print(controller.text);
-                                        });
-                                      },
-                                      child: ListTile(
-                                        title: Text(chapter[index]),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              )
-                            : SizedBox(),
                         SizedBox(
                           height: 10,
                         ),
