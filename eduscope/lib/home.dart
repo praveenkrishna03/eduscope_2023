@@ -1,12 +1,11 @@
-import 'package:eduscope_2023/community_page.dart';
-import 'package:eduscope_2023/feed_page.dart';
-import 'package:eduscope_2023/profile_page.dart';
-import 'package:eduscope_2023/search.dart';
-import 'package:eduscope_2023/surf_page.dart';
+import 'package:eduscope_2023/main_pages/community_page.dart';
+import 'package:eduscope_2023/main_pages/feed_page.dart';
+import 'package:eduscope_2023/main_pages/profile_page.dart';
+import 'package:eduscope_2023/main_pages/search.dart';
+import 'package:eduscope_2023/main_pages/surf_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'auth.dart';
-
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -15,9 +14,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String uid='';
+  String uid = '';
   final User? user = Auth().currentUser;
-  FirebaseAuth _auth=FirebaseAuth.instance;
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> signOut() async {
     await Auth().signOut();
@@ -30,22 +29,20 @@ class _HomePageState extends State<HomePage> {
       _currentIndex = index;
     });
   }
-  
 
   @override
   Widget build(BuildContext context) {
-    User? user=_auth.currentUser;
-       uid=user?.uid??'';
+    User? user = _auth.currentUser;
+    uid = user?.uid ?? '';
 
     final List<Widget> _pages = [
-    FeedPage(uid:uid),
-    SearchPage(uid:uid),
-    SurfPage(),
-    CommunityPage(),
-    ProfilePage(uid:uid),
-  ];
+      FeedPage(uid: uid),
+      SearchPage(uid: uid),
+      SurfPage(),
+      CommunityPage(),
+      ProfilePage(uid: uid),
+    ];
 
-  
     return Scaffold(
       /*appBar: AppBar(
         leading:
@@ -74,7 +71,6 @@ class _HomePageState extends State<HomePage> {
         user?.email ?? 'user email',
         style: TextStyle(color: Colors.white),
       ))*/
-      
 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
@@ -111,5 +107,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-
