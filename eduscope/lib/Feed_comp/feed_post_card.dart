@@ -102,9 +102,6 @@ class FeedPostCard extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: 5,
-          ),
           snap['type'] == 'document'
               ? GestureDetector(
                   onTap: () {
