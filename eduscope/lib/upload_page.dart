@@ -138,9 +138,18 @@ class UploadPageState extends State<UploadPage> {
     "Social Science"
   ];
 
-  String? selectedSubject;
-  String? selectedChapter;
-  String? selectedClass;
+  final ValueNotifier<String> selectedSubject =
+      ValueNotifier<String>('Select Subject');
+
+  final ValueNotifier<String> selectedClass =
+      ValueNotifier<String>('Select Class');
+
+  final ValueNotifier<String> selectedChapter =
+      ValueNotifier<String>('Select Chapter');
+
+  //String? selectedSubject;
+  //String? selectedChapter;
+  //String? selectedClass;
   List<String> chapter = [
     "1",
     "2",
@@ -157,7 +166,7 @@ class UploadPageState extends State<UploadPage> {
   ];
   List<String> classes = ["6", "7", "8", "9", "10", "11", "12"];
 
-  void showClassMenu(BuildContext context) {
+  /*void showClassMenu(BuildContext context) {
     final RenderBox button = context.findRenderObject() as RenderBox;
     final Offset offset = button.localToGlobal(Offset.zero);
 
@@ -178,7 +187,7 @@ class UploadPageState extends State<UploadPage> {
         });
       }
     });
-  }
+  }*/
 
   TextEditingController controller = TextEditingController();
 
@@ -380,35 +389,42 @@ class UploadPageState extends State<UploadPage> {
                         Container(
                           height: 40,
                           width: 200,
-                          //color: Colors.black,
                           decoration: ShapeDecoration(
                             color: Colors.grey,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(17),
                             ),
                           ),
-
                           child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-
-                              //controller: controller,
-                              //decoration: InputDecoration(
-                              children: [
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      // Open dropdown menu
-                                      showClassMenu(context);
-                                    },
-                                    child: Text(
-                                      selectedClass ?? 'Select Class',
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Expanded(
+                                child: ValueListenableBuilder<String>(
+                                  valueListenable: selectedClass,
+                                  builder: (context, value, child) {
+                                    return Text(
+                                      value,
                                       textAlign: TextAlign.center,
-                                    ),
-                                  ),
+                                    );
+                                  },
                                 ),
-                              ]
-                              //),
                               ),
+                              PopupMenuButton<String>(
+                                icon: Icon(Icons.arrow_drop_down),
+                                onSelected: (String value) {
+                                  selectedClass.value = value;
+                                },
+                                itemBuilder: (BuildContext context) {
+                                  return classes.map((String _class) {
+                                    return PopupMenuItem<String>(
+                                      value: _class,
+                                      child: Text(_class),
+                                    );
+                                  }).toList();
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(
                           height: 10,
@@ -416,46 +432,42 @@ class UploadPageState extends State<UploadPage> {
                         Container(
                           height: 40,
                           width: 200,
-                          //color: Colors.black,
                           decoration: ShapeDecoration(
                             color: Colors.grey,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(17),
                             ),
                           ),
-
                           child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-
-                              //controller: controller,
-                              //decoration: InputDecoration(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    selectedSubject ?? 'Select Subject',
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                PopupMenuButton<String>(
-                                  icon: Icon(Icons
-                                      .arrow_drop_down), // Icon for dropdown
-                                  onSelected: (String value) {
-                                    setState(() {
-                                      selectedSubject = value;
-                                    });
-                                  },
-                                  itemBuilder: (BuildContext context) {
-                                    return subjects.map((String subject) {
-                                      return PopupMenuItem<String>(
-                                        value: subject,
-                                        child: Text(subject),
-                                      );
-                                    }).toList();
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Expanded(
+                                child: ValueListenableBuilder<String>(
+                                  valueListenable: selectedSubject,
+                                  builder: (context, value, child) {
+                                    return Text(
+                                      value,
+                                      textAlign: TextAlign.center,
+                                    );
                                   },
                                 ),
-                              ]
-                              //),
                               ),
+                              PopupMenuButton<String>(
+                                icon: Icon(Icons.arrow_drop_down),
+                                onSelected: (String value) {
+                                  selectedSubject.value = value;
+                                },
+                                itemBuilder: (BuildContext context) {
+                                  return subjects.map((String subject) {
+                                    return PopupMenuItem<String>(
+                                      value: subject,
+                                      child: Text(subject),
+                                    );
+                                  }).toList();
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(
                           height: 10,
@@ -463,46 +475,42 @@ class UploadPageState extends State<UploadPage> {
                         Container(
                           height: 40,
                           width: 200,
-                          //color: Colors.black,
                           decoration: ShapeDecoration(
                             color: Colors.grey,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(17),
                             ),
                           ),
-
                           child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-
-                              //controller: controller,
-                              //decoration: InputDecoration(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    selectedChapter ?? 'Select Chapter',
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                PopupMenuButton<String>(
-                                  icon: Icon(Icons
-                                      .arrow_drop_down), // Icon for dropdown
-                                  onSelected: (String value) {
-                                    setState(() {
-                                      selectedChapter = value;
-                                    });
-                                  },
-                                  itemBuilder: (BuildContext context) {
-                                    return chapter.map((String chapter) {
-                                      return PopupMenuItem<String>(
-                                        value: chapter,
-                                        child: Text(chapter),
-                                      );
-                                    }).toList();
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Expanded(
+                                child: ValueListenableBuilder<String>(
+                                  valueListenable: selectedChapter,
+                                  builder: (context, value, child) {
+                                    return Text(
+                                      value,
+                                      textAlign: TextAlign.center,
+                                    );
                                   },
                                 ),
-                              ]
-                              //),
                               ),
+                              PopupMenuButton<String>(
+                                icon: Icon(Icons.arrow_drop_down),
+                                onSelected: (String value) {
+                                  selectedChapter.value = value;
+                                },
+                                itemBuilder: (BuildContext context) {
+                                  return chapter.map((String chapter) {
+                                    return PopupMenuItem<String>(
+                                      value: chapter,
+                                      child: Text(chapter),
+                                    );
+                                  }).toList();
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(
                           height: 10,
@@ -546,9 +554,9 @@ class UploadPageState extends State<UploadPage> {
                                               Colors.grey),
                                     ),
                                     onPressed: () {
-                                      if (hintext_sub == 'Select Subject' ||
-                                          hintext_chap == 'Select Chapter' ||
-                                          hintext_class == 'Select Class' ||
+                                      if (selectedSubject == 'Select Subject' ||
+                                          selectedChapter == 'Select Chapter' ||
+                                          selectedClass == 'Select Class' ||
                                           controller.text == null) {
                                         showSnakbar(context, Colors.white,
                                             'Please fill the respective coloumns');

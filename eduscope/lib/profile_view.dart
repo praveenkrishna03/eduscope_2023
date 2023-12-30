@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eduscope_2023/feed_post_card.dart';
+import 'package:eduscope_2023/Feed_comp/feed_post_card.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../account_search_page.dart';
-import '../media_search_page.dart';
-import '../document_search_page.dart';
-import '../test_search_page.dart';
+import 'package:eduscope_2023/search_comp/account_search_page.dart';
+import 'package:eduscope_2023/search_comp/document_search_page.dart';
+import 'package:eduscope_2023/search_comp/media_search_page.dart';
+import 'package:eduscope_2023/search_comp/test_search_page.dart';
 
 class SearchPage extends StatefulWidget {
   final uid;

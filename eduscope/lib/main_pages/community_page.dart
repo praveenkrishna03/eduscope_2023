@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eduscope_2023/messeging%20_services.dart';
-import 'package:eduscope_2023/search_community.dart';
+import 'package:eduscope_2023/community_comp/messeging_services.dart';
+import 'package:eduscope_2023/search_comp/search_community.dart';
 import 'package:eduscope_2023/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../group_tile.dart';
+import 'package:eduscope_2023/community_comp/group_tile.dart';
 import '../auth.dart';
-import '../account_search_page.dart';
+import 'package:eduscope_2023/search_comp/account_search_page.dart';
+
 import '../auth.dart';
 
 class CommunityPage extends StatefulWidget {

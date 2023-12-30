@@ -1,7 +1,7 @@
 // user_list_page.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'messeging _services.dart';
+import 'messeging_services.dart';
 
 class UserListPage extends StatelessWidget {
   final String groupId;
@@ -39,7 +39,8 @@ class UserListView extends StatelessWidget {
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
-              DocumentSnapshot<Map<String, dynamic>> doc = snapshot.data!.docs[index];
+              DocumentSnapshot<Map<String, dynamic>> doc =
+                  snapshot.data!.docs[index];
               String userName = doc['Name'];
               String userEmail = doc['Email'];
 
@@ -48,7 +49,8 @@ class UserListView extends StatelessWidget {
                 subtitle: Text(userEmail),
                 onTap: () async {
                   // Call the function to add the selected user to the group
-                  await MessagingService().addMemberToGroupAndUser(groupId, userName, groupName);
+                  await MessagingService()
+                      .addMemberToGroupAndUser(groupId, userName, groupName);
 
                   // Navigate back to the community page
                   Navigator.of(context).pop();

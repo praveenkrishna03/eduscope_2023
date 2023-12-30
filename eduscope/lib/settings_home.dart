@@ -1,4 +1,4 @@
-import 'package:eduscope_2023/about_page.dart';
+import 'package:eduscope_2023/profile_comp/about_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
