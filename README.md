@@ -11,5 +11,5 @@ Eduscope is a social media platform designed exclusively for educational purpose
 - **Resource Sharing:** Easily upload and share educational resources such as notes, articles, and presentations.
 - **Image Sharing:** Share educational infographics, diagrams, and visual aids to enhance learning.
 - **Video Sharing:** Upload and view educational videos, tutorials, and lectures to expand your knowledge.
-- **Community Interaction:** Engage with fellow students and educators through a seperate community section
+- **Community Interaction:** Engage with fellow students and educators through a seperate community section.
 - **Personalized Feed:** Customize your feed based on your interests and preferences, ensuring relevant content tailored just for you.
