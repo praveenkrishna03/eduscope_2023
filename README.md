@@ -1,5 +1,7 @@
 # Eduscope
 
+![Eduscope Logo](https://github.com/praveenkrishna03/eduscope_2023/blob/main/Eduscope_poster.jpg)
+
 Welcome to Eduscope - your go-to educational hub for sharing resources, images, and videos among students. 
 
 ## About
