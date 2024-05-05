@@ -1,4 +1,4 @@
-# Eduscope
+# Eduscope 📖
 
 ![Eduscope Logo](https://github.com/praveenkrishna03/eduscope_2023/blob/main/Eduscope_poster.jpg)
 
