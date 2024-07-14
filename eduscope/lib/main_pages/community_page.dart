@@ -182,7 +182,7 @@ class CommunityPage_state extends State<CommunityPage> {
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor,
+                    backgroundColor: Theme.of(context).primaryColor,
                   ),
                   child: const Text("CANCEL"),
                 ),
@@ -216,7 +216,7 @@ class CommunityPage_state extends State<CommunityPage> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor,
+                    backgroundColor: Theme.of(context).primaryColor,
                   ),
                   child: const Text("CREATE"),
                 )

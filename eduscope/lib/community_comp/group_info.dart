@@ -270,7 +270,7 @@ class _GroupInfoState extends State<GroupInfo> {
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor,
+                    backgroundColor: Theme.of(context).primaryColor,
                   ),
                   child: const Text("CANCEL"),
                 ),
